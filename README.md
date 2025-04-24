@@ -92,6 +92,15 @@ http://127.0.0.1:5000/
 
 ## Demo Video
 
+![Screenshot 2025-04-25 011405](https://github.com/user-attachments/assets/1162a931-97df-4b16-a002-d9e7e56fb13e)
+![image](https://github.com/user-attachments/assets/81884dab-fa02-42d4-8f71-2e34e0812fcd)
+![image](https://github.com/user-attachments/assets/f0e1cc97-d65a-4c5b-a47d-09e0ea6a01b8)
+![image](https://github.com/user-attachments/assets/5ffc8aca-be5f-4100-9fa1-741f16aeada0)
+![image](https://github.com/user-attachments/assets/7ece961e-1b8c-4b35-9c77-70c0ee7830e2)
+![image](https://github.com/user-attachments/assets/559417b7-7ff1-4ba2-959b-ec54d76ca04a)
+![image](https://github.com/user-attachments/assets/2e04ff8f-b0c5-4a23-87ee-d044b4509566)
+![image](https://github.com/user-attachments/assets/7cf9a4ec-dc27-4a96-9f99-6c070598f582)
+
 
 
 ## Future Enhancements
