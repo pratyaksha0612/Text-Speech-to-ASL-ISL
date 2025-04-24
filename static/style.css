@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("https://images.ctfassets.net/nnkxuzam4k38/219VUMa1SOxASKqCE2OgT4/be1c810344587bd7f6f203337d23602a/ranger-4df6c1b6.png");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    justify-content: center;
+    align-items: center;
+    color: #04011c;
+  }
+  
+  nav {
+    background-color: rgba(0, 13, 28, 0.9);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    color: white;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: bold;
+  }
+  
+  .grid {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    padding: 3rem;
+    margin: 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    transition: transform 0.2s ease-in-out;
+    width: 320px;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card p {
+    font-size: 1.3rem;
+    line-height: 2rem;
+  }
+  
+  main {
+    padding: 1rem;
+  }
+  

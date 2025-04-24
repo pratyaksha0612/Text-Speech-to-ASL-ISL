@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 style="text-align:center; font-size: 4em;">Welcome to Text/Speech to Sign Translator</h1>
+
+
+<p style="text-align:center; font-size: 2em; margin-top: -10px; color: rgb(254, 255, 255);">
+    Choose your preferred Sign Language
+</p>
+
+<div class="grid" style="justify-content: space-evenly;">
+    <!-- ISL Card -->
+    <a class="card" href="/isl" style="width: 280px; padding: 2.5rem;">
+        <h2 style="font-size: 3em;">👧🏻 ISL</h2>
+        <p style="text-align: left;">
+            ➤ Alphabets<br>
+            ➤ Words<br>
+            ➤ Sentences
+        </p>
+    </a>
+
+    <!-- ASL Card -->
+    <a class="card" href="/asl" style="width: 280px; padding: 2.5rem;">
+        <h2 style="font-size: 3em;">👦🏻 ASL</h2>
+        <p style="text-align: left;">
+            ➤ Alphabets<br>
+            ➤ Words<br>
+            ➤ Sentences
+        </p>
+    </a>
+</div>
+{% endblock %}

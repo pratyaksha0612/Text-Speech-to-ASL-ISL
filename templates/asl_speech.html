@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech to ASL Translator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #b2dfdb, #80cbc4);
+    }
+
+    nav {
+      background-color: #001f1f;
+      padding: 15px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 1.1rem;
+      margin-right: 20px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #00332d;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #004d40;
+      transform: scale(1.05);
+    }
+
+    #recording-indicator {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: red;
+      margin-bottom: 10px;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div style="display: flex; align-items: center;">
+      <a href="/">🏠 Home</a>
+    </div>
+    <div>
+      <a href="/isl">ISL</a>
+      <a href="/asl">ASL</a>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="card">
+      <h2>Speech to ASL Translator</h2>
+      <div id="recording-indicator" style="display: none;">🎙️ Recording...</div>
+      <button onclick="asl_startRecording()">Start Recording</button>
+      <button onclick="asl_stopRecording()">Stop Recording</button>
+      <p id="status"></p>
+    </div>
+  </div>
+
+  <script>
+    const recordingIndicator = document.getElementById("recording-indicator");
+    const status = document.getElementById("status");
+
+    async function asl_startRecording() {
+      recordingIndicator.style.display = "block";
+      status.textContent = "Recording...";
+
+      try {
+        const response = await fetch("/asl_start_recording", {
+          method: "POST"
+        });
+
+        if (response.ok) {
+          status.textContent = "Recording started.";
+        } else {
+          status.textContent = "❌ Error starting recording.";
+        }
+      } catch (error) {
+        console.error(error);
+        status.textContent = "❌ Could not connect to server.";
+      }
+    }
+
+    async function asl_stopRecording() {
+      recordingIndicator.style.display = "none";
+      status.textContent = "Processing...";
+
+      try {
+        const response = await fetch("/asl_stop_recording", {
+          method: "POST"
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          status.textContent = `Translation complete: ${result.text}`;
+        } else {
+          status.textContent = "❌ Error: Translation failed.";
+        }
+      } catch (error) {
+        console.error(error);
+        status.textContent = "❌ Could not connect to server.";
+      }
+    }
+  </script>
+
+</body>
+</html>

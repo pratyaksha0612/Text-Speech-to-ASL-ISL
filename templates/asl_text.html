@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Text to ASL Translator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #b2dfdb, #80cbc4);
+    }
+
+    nav {
+      background-color: #001f1f;
+      padding: 15px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 1.1rem;
+      margin-right: 20px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #00332d;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #004d40;
+      transform: scale(1.05);
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; align-items: center;">
+      <a href="/">🏠 Home</a>
+    </div>
+    <div>
+      <a href="/isl">ISL</a>
+      <a href="/asl">ASL</a>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="card">
+      <h2>Text to ASL Translator</h2>
+      <form id="translateForm">
+        <input type="text" id="inputText" name="inputText" placeholder="Enter text" required />
+        <br />
+        <button type="submit">Translate</button>
+      </form>
+      <p id="status"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("translateForm");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const text = document.getElementById("inputText").value;
+      status.textContent = "Translating...";
+
+      try {
+        const response = await fetch("/Atranslate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: text })
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          status.textContent = result.status;
+        } else {
+          status.textContent = "Error: Translation failed.";
+        }
+      } catch (error) {
+        console.error(error);
+        status.textContent = "Error: Could not connect to server.";
+      }
+    });
+  </script>
+</body>
+</html>
