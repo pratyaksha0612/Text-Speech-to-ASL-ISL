@@ -2,7 +2,7 @@ import os
 import cv2
 
 # Paths
-isl_dataset_path = "C:/Users/Chhavi/Desktop/text-speech-to-sign/dataset/isl"
+isl_dataset_path = "C:\\Users\\PRATYAKSHA SINGH\\OneDrive\\Desktop\\COLLEGE\\PROJECTS\\Text-Speech-to-ASL-ISL\\dataset\\isl"
 black_video_path = "static/blank.mp4"  # Shown for space
 
 # Resize ratio for letter videos

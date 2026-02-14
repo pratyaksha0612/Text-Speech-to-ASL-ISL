@@ -12,7 +12,7 @@ duration = 0
 recording = None
 recording_file = None
 
-isl_dataset_path = "C:/Users/Chhavi/Desktop/text-speech-to-sign/dataset/isl"
+isl_dataset_path = "C:\\Users\\PRATYAKSHA SINGH\\OneDrive\\Desktop\\COLLEGE\\PROJECTS\\Text-Speech-to-ASL-ISL\\dataset\\isl"
 black_video_path = "static/blank.mp4"
 resize_ratio = 0.5
 
