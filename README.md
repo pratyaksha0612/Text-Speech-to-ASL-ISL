@@ -1,116 +1,204 @@
-# Text and Speech to ASL/ISL Translator
+# Vyakta — Text and Speech to Sign Language Translator
 
-This project is a web-based application that facilitates communication by converting both **text** and **speech input** into **American Sign Language (ASL)** or **Indian Sign Language (ISL)**. The goal of this project is to provide an intuitive platform for the deaf and hard-of-hearing community by translating written or spoken English into corresponding sign language via video playback.
+**Vyakta (व्यक्त)** is a Sanskrit word meaning **"expressed"** or **"made visible."**  
+This project embodies that meaning by converting **text and speech into visual sign language**, enabling communication accessibility through expression.
 
-## Project Description
+Vyakta is a web-based application that translates **Text and Speech into Indian Sign Language (ISL) and American Sign Language (ASL)** using real sign language video playback.
 
-The user begins by selecting their preferred sign language mode — either **ASL** or **ISL** — from the homepage. Afterward, the user can either:
+It is designed to support accessibility, assist learning, and bridge communication gaps between the hearing and the deaf community.
 
-- **Enter text input**: The user types in a word, letter, or full sentence.
-- **Provide speech input**: The system transcribes speech into text using speech recognition.
+---
 
-### Current Implementation
+# Demo
 
-- **Spelling Out Words**: All words are spelled out letter by letter using pre-recorded **A–Z sign language videos**. If a word is provided as input, each letter of the word is shown sequentially.
-- **Blank Handling**: If the input is blank or unrecognized, a **black screen** is displayed, and the system proceeds to the next word.
-- **Sentence Handling**: Sentences are split into words, and each word is spelled out using the alphabet.
+A demonstration of the project is available in:
 
-## Features
+---
 
-- User can select between **ASL** and **ISL** modes.
-- Dual input support for **Text** and **Speech**.
-- **Real-time video playback** for each letter in a word.
-- Automatic handling of blank inputs or unsupported words with a black screen.
-- **Text-to-speech** functionality for added accessibility and feedback.
+# Features
 
-## Project Structure
+• Supports both **Indian Sign Language (ISL)** and **American Sign Language (ASL)**
 
-```
-Text-Speech-to-ASL-ISL/
-├── app.py                     # Flask server application
-├── templates/
-│   └── index.html             # Main user interface
-├── static/
-│   ├── style.css              # Application styling
-│   └── video_display.js       # JavaScript for handling video sequencing
+• Accepts:
+
+- Text input  
+- Speech input  
+
+• Converts speech to text using speech recognition
+
+• Displays **real sign language videos**
+
+• Smooth continuous playback in a single window
+
+• Handles:
+
+- Words  
+- Sentences  
+- Spaces  
+
+• Modern, dynamic web interface
+
+---
+
+# How It Works
+
+1. User opens the Vyakta web application
+
+2. Selects preferred sign language:
+
+   - ISL  
+   - ASL  
+
+3. Provides input:
+
+   - Text  
+   OR  
+   - Speech  
+
+4. If speech is provided, system converts speech → text
+
+5. Text is split into characters
+
+6. Corresponding sign language videos are played sequentially
+
+---
+
+# Project Structure
+
+Vyakta/
+│
+├── app.py
+│
+├── speechtoasl.py
+├── speechtoisl.py
+│
+├── texttoasl.py
+├── texttoisl.py
+│
 ├── dataset/
-│   ├── asl/                   # ASL A–Z sign videos (a.mp4, b.mp4, ...)
-│   └── isl/                   # ISL A–Z sign videos (a.mp4, b.mp4, ...)
-├── labels.csv                 # Mapping of words to video paths
-└── wlasl.json                 # Video ID mapping for WLASL dataset
-```
+│ ├── asl/
+│ └── isl/
+│
+├── static/
+│ ├── style.css
+│ ├── logo-main.png
+│ ├── logo-nav.png
+│ ├── logo-hero.png
+│ ├── blank.mp4
+│
+├── templates/
+│ ├── base.html
+│ ├── index.html
+│ ├── about.html
+│ ├── asl.html
+│ ├── isl.html
+│ ├── asl_text.html
+│ ├── asl_speech.html
+│ ├── isl_text.html
+│ ├── isl_speech.html
+│
+└── DEMO.mp4
 
+---
 
-## Installation
+# Installation
 
-### Step 1: Clone the Repository
+## Step 1 — Clone Repository
 
-```bash
 git clone https://github.com/pratyaksha0612/Text-Speech-to-ASL-ISL.git
+
 cd Text-Speech-to-ASL-ISL
-```
 
-### Step 2: Install Dependencies
 
-Ensure Python 3.8+ is installed.
+---
 
-```bash
-pip install -r requirements.txt
-```
+## Step 2 — Install Dependencies
 
-> Note: This application requires `ffmpeg` to be installed and added to your system path (used by moviepy).
+pip install flask
+pip install opencv-python
+pip install sounddevice
+pip install scipy
+pip install SpeechRecognition
 
-## Running the Application
 
-```bash
+---
+
+# Running the Application
+
 python app.py
-```
 
-Then open your browser and navigate to:
 
-```
+Open browser and go to:
+
 http://127.0.0.1:5000/
-```
 
 
-## How It Works
+---
 
-1. The user selects either ASL or ISL mode.
-2. The user provides input via text or speech.
-3. If the input is a word, the system spells it out letter by letter using corresponding sign language videos.
-4. If the input is blank or unrecognized, a black screen is shown, and the system proceeds to the next word.
-5. The system continues by displaying sign videos for each letter in the next word or phrase.
+# Technologies Used
 
-## Dataset Credits
+Python  
+Flask  
+OpenCV  
+SpeechRecognition  
+HTML  
+CSS  
+JavaScript  
 
-- **ASL Dataset**: Derived from educational sign videos  
-  Source: [ASL Alphabet Sign Language](https://youtu.be/DBQINq0SsAw?si=J802HVMhR6SAe0sX)
+---
 
-- **ISL Dataset**: Extracted from tutorial footage for Indian Sign Language  
-  Source: [ISL Alphabet Signs](https://youtu.be/qcdivQfA41Y?si=qTzoJTMSPW8tIIpG)
+# Purpose
 
+Vyakta aims to:
 
-## Demo Video
+• Make communication accessible
 
-![Screenshot 2025-04-25 011405](https://github.com/user-attachments/assets/1162a931-97df-4b16-a002-d9e7e56fb13e)
-![image](https://github.com/user-attachments/assets/81884dab-fa02-42d4-8f71-2e34e0812fcd)
-![image](https://github.com/user-attachments/assets/f0e1cc97-d65a-4c5b-a47d-09e0ea6a01b8)
-![image](https://github.com/user-attachments/assets/5ffc8aca-be5f-4100-9fa1-741f16aeada0)
-![image](https://github.com/user-attachments/assets/7ece961e-1b8c-4b35-9c77-70c0ee7830e2)
-![image](https://github.com/user-attachments/assets/559417b7-7ff1-4ba2-959b-ec54d76ca04a)
-![image](https://github.com/user-attachments/assets/2e04ff8f-b0c5-4a23-87ee-d044b4509566)
-![image](https://github.com/user-attachments/assets/7cf9a4ec-dc27-4a96-9f99-6c070598f582)
+• Enable sign language learning
 
+• Assist deaf-mute communication
 
+• Convert speech into visual expression
 
-## Future Enhancements
+---
 
-- Expand the system to handle complete words and phrases for ASL/ISL.
-- Incorporate real-time gesture recognition to support sign-to-text translation.
-- Enhance the performance for low-resource devices.
-- Improve UI/UX design for better accessibility and interactivity.
+# Meaning of Name
 
+**Vyakta (व्यक्त)**
 
-## License
+Meaning:
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for full terms.
+Expressed  
+Manifested  
+Made visible  
+
+This reflects the core goal of the project:
+
+Converting speech and text into visible communication.
+
+---
+
+# Future Improvements
+
+• Word-level translation
+
+• Sentence-level translation
+
+• Real-time sign recognition
+
+• Deep learning integration
+
+• Mobile application version
+
+---
+
+# Author
+
+Pratyaksha Singh  
+B.Tech CSE — AI & ML  
+VIT Bhopal University
+
+---
+
+# License
+
+MIT License
