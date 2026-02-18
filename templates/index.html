@@ -2,18 +2,60 @@
 
 {% block content %}
   <!-- HERO SECTION -->
-
   <section class="hero">
-    <img src="{{ url_for('static', filename='logo-main.png') }}" class="hero-logo-main" />
+    <div class="hero-layout">
+      <!-- LEFT ASL -->
+      <a href="/asl" class="language-card">
+        <div class="orbit-text">
+          <svg viewBox="0 0 300 300">
+            <defs>
+              <path id="circlePath" d="M 50,150
+                   a 100,100 0 1,1 200,0" />
+            </defs>
 
-    <h1 class="vyakt-title">VYAKT</h1>
+            <text class="orbit-word">
+              <textPath href="#circlePath" startOffset="50%" text-anchor="middle">CLICK TO TRANSLATE</textPath>
+            </text>
+          </svg>
+        </div>
 
-    <p class="tagline">Where language becomes visual.</p>
+        <img src="{{ url_for('static', filename='asl-logo.png') }}" class="lang-logo" />
 
-    <div class="buttons">
-      <a href="/asl">American Sign Language</a>
+        <h2 class="lang-title">ASL</h2>
 
-      <a href="/isl">Indian Sign Language</a>
+        <p class="lang-sub">American Sign Language</p>
+      </a>
+
+      <!-- CENTER -->
+      <div class="hero-center">
+        <img src="{{ url_for('static', filename='logo-main.png') }}" class="hero-logo" />
+
+        <h1 class="hero-title">VYAKT</h1>
+
+        <p class="hero-tagline">Where language becomes visual.</p>
+      </div>
+
+      <!-- RIGHT ISL -->
+      <a href="/isl" class="language-card">
+        <div class="orbit-text">
+          <svg viewBox="0 0 300 300">
+            <defs>
+              <path id="circlePath" d="M 50,150
+                   a 100,100 0 1,1 200,0" />
+            </defs>
+
+            <text class="orbit-word">
+              <textPath href="#circlePath" startOffset="50%" text-anchor="middle">CLICK TO TRANSLATE</textPath>
+            </text>
+          </svg>
+        </div>
+
+        <img src="{{ url_for('static', filename='isl-logo.png') }}" class="lang-logo" />
+
+        <h2 class="lang-title">ISL</h2>
+
+        <p class="lang-sub">Indian Sign Language</p>
+      </a>
     </div>
   </section>
 
