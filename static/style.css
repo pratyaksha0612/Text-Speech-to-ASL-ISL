@@ -381,15 +381,12 @@ nav {
 
 
 
-/* LOGO */
-
-
 
 .hero-logo {
 
     width: 260px;
 
-    margin-bottom: -40px;
+    margin-bottom: -10px;
 
     position: relative;
 
@@ -418,7 +415,7 @@ nav {
 
     width: 260px;
 
-    margin-bottom: -40px;
+    margin-bottom: -60px;
 
     filter:
 
@@ -877,7 +874,7 @@ nav {
 
         0 0 80px rgba(79, 195, 247, 0.4);
 
-    margin: 10px 0;
+    margin: 0px 0;
 
 }
 

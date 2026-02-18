@@ -35,7 +35,7 @@
 <div class="nav-right">
 
 <a href="/">Home</a>
-<a href="/about">About Vyakt</a>
+<a href="/about">About VYAKT</a>
 <a href="/creator">Creator</a>
 <a href="/isl">ISL</a>
 <a href="/asl">ASL</a>
@@ -75,9 +75,9 @@ canvas.height = window.innerHeight;
 
 let stars = [];
 
-let numStars = 220;
+let numStars = 520;
 
-let speed = 0.4;
+let speed = 0.5;
 
 
 for(let i=0;i<numStars;i++){
@@ -161,9 +161,12 @@ let py=canvas.height/2+star.y*k*canvas.width;
 let size=(1-star.z/canvas.width)*1.8;
 
 
-ctx.fillStyle="rgba(255,255,255,0.5)";
+let opacity = 0.3 + Math.random()*0.7;
+
+ctx.fillStyle = "rgba(255,255,255,"+opacity+")";
 
 ctx.fillRect(px,py,size,size);
+
 
 
 }
