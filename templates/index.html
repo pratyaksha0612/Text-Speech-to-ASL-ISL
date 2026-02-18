@@ -1,31 +1,111 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block content %}
-<h1 style="text-align:center; font-size: 4em;">Welcome to Text/Speech to Sign Translator</h1>
+  <!-- HERO SECTION -->
 
+  <section class="hero">
+    <img src="{{ url_for('static', filename='logo-main.png') }}" class="hero-logo-main" />
 
-<p style="text-align:center; font-size: 2em; margin-top: -10px; color: rgb(254, 255, 255);">
-    Choose your preferred Sign Language
-</p>
+    <h1 class="vyakt-title">Vyakt</h1>
 
-<div class="grid" style="justify-content: space-evenly;">
-    <!-- ISL Card -->
-    <a class="card" href="/isl" style="width: 280px; padding: 2.5rem;">
-        <h2 style="font-size: 3em;">👧🏻 ISL</h2>
-        <p style="text-align: left;">
-            ➤ Alphabets<br>
-            ➤ Words<br>
-            ➤ Sentences
-        </p>
-    </a>
+    <p class="tagline">Where language becomes visual.</p>
 
-    <!-- ASL Card -->
-    <a class="card" href="/asl" style="width: 280px; padding: 2.5rem;">
-        <h2 style="font-size: 3em;">👦🏻 ASL</h2>
-        <p style="text-align: left;">
-            ➤ Alphabets<br>
-            ➤ Words<br>
-            ➤ Sentences
-        </p>
-    </a>
-</div>
+    <div class="buttons">
+      <a href="/asl">American Sign Language</a>
+
+      <a href="/isl">Indian Sign Language</a>
+    </div>
+  </section>
+
+  <section class="works-section">
+    <div class="works-header">
+      <h2 class="works-title">How Vyakt Works</h2>
+
+      <p class="works-subtitle">Vyakt transforms language into visual communication — preserving meaning, emotion, and accessibility in real time.</p>
+    </div>
+
+    <div class="works-grid">
+      <div class="work-card">
+        <h3>Speech → Sign</h3>
+
+        <p>Vyakt listens to spoken language, understands it, and instantly renders it into sign language visuals.
+
+          This allows conversations to happen naturally, without requiring reading or interpretation.</p>
+      </div>
+
+      <div class="work-card">
+        <h3>Text → Sign</h3>
+
+        <p>Written words are transformed into expressive visual language, making digital communication accessible
+
+          to those who understand sign language as their primary form of communication.</p>
+      </div>
+
+      <div class="work-card">
+        <h3>Real-Time Translation</h3>
+
+        <p>Built for live interaction — enabling inclusive conversations in classrooms, meetings, and everyday life.
+
+          Vyakt is designed to evolve into seamless real-time communication.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq-section">
+    <div class="faq-header">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+
+      <p class="faq-subtitle">Everything about Vyakt, its purpose, and its future.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How is Vyakt useful if text is already visible?</span>
+
+          <span class="faq-plus"></span>
+        </button>
+
+        <div class="faq-answer">
+          <p>Sign language is visual, not textual. Vyakt transforms language into visual expression, allowing communication in its natural form instead of forcing reliance on reading.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Does Vyakt work in real time?</span>
+
+          <span class="faq-plus"></span>
+        </button>
+
+        <div class="faq-answer">
+          <p>Vyakt is being developed toward real-time translation, enabling live conversations, meetings, and accessible digital communication.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Who can benefit from Vyakt?</span>
+
+          <span class="faq-plus"></span>
+        </button>
+
+        <div class="faq-answer">
+          <p>Students, professionals, educators, and anyone interacting with sign language users.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Does Vyakt support ASL and ISL?</span>
+
+          <span class="faq-plus"></span>
+        </button>
+
+        <div class="faq-answer">
+          <p>Yes. Vyakt supports both American and Indian Sign Language.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

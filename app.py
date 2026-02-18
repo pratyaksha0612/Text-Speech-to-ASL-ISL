@@ -7,6 +7,10 @@ import threading
 
 app = Flask(__name__, static_url_path='/static')
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -91,6 +95,10 @@ def asl_stop_recording_route():
     if text:
         return jsonify({"status": "Translation complete!", "text": text})
     return jsonify({"status": "Translation failed."}), 400
+
+@app.route("/creator")
+def creator():
+    return render_template("creator.html")
 
 
 if __name__ == '__main__':

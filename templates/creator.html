@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="about-page">
+    <div class="about-wrapper">
+      <div class="developer-card">
+        <img src="{{ url_for('static', filename='pratyaksha.jpeg') }}" />
+
+        <div>
+          <h1>Pratyaksha Singh</h1>
+
+          <p>Vyakt represents the beginning of a journey.
+
+            It started as a technical exploration into sign language recognition, driven by curiosity and a desire to build something meaningful.</p>
+
+          <p>While learning sign language, a realization emerged — communication is not equal for everyone.
+
+            Technology had the power to change that.
+
+            Vyakt became that effort.</p>
+
+          <p>This project reflects a commitment to building technology that serves real human needs.
+
+            Not just functionality, but purpose.</p>
+
+          <p>Vyakt is the foundation of something larger.
+
+            A vision to create systems that make communication truly universal.</p>
+
+          <a href="https://linkedin.com/in/pratyaksha-singh-764916277" target="_blank" class="linkedin-btn">LinkedIn Profile</a>
+        </div>
+      </div>
+
+      <div class="about-motto">This is where it started.</div>
+    </div>
+  </section>
+{% endblock %}
