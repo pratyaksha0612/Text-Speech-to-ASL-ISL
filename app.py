@@ -4,8 +4,21 @@ from texttoasl import text_to_Asign
 from speechtoisl import isl_start_recording, isl_stop_and_translate
 from speechtoasl import asl_start_recording, asl_stop_and_translate
 import threading
+from flask import send_from_directory
+import os
+
 
 app = Flask(__name__, static_url_path='/static')
+
+ISL_DATASET = r"C:\Users\PRATYAKSHA SINGH\OneDrive\Desktop\COLLEGE\PROJECTS\Text-Speech-to-ASL-ISL\dataset\isl"
+@app.route('/isl_dataset/<filename>')
+def serve_isl_dataset(filename):
+    return send_from_directory(ISL_DATASET, filename)
+
+ASL_DATASET = r"C:\Users\PRATYAKSHA SINGH\OneDrive\Desktop\COLLEGE\PROJECTS\Text-Speech-to-ASL-ISL\dataset\asl"
+@app.route('/asl_dataset/<filename>')
+def serve_asl_dataset(filename):
+    return send_from_directory(ASL_DATASET, filename)
 
 @app.route("/about")
 def about():
@@ -22,6 +35,8 @@ def asl():
 @app.route('/isl')
 def isl():
     return render_template('isl.html')
+
+
 
 @app.route('/isl_text')
 def isl_text():
@@ -99,6 +114,7 @@ def asl_stop_recording_route():
 @app.route("/creator")
 def creator():
     return render_template("creator.html")
+
 
 
 if __name__ == '__main__':

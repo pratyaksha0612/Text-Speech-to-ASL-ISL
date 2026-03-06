@@ -1,156 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Speech to ISL Translator</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #b2dfdb, #80cbc4);
-    }
+{% extends 'base.html' %}
+{% block content %}
 
-    nav {
-      background-color: #001f1f;
-      padding: 15px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+<section class="translator-page">
 
-    nav a {
-      text-decoration: none;
-      color: white;
-      font-size: 1.1rem;
-      margin-right: 20px;
-    }
+<h1 class="translator-title">ISL Speech Translator</h1>
 
-    nav a:hover {
-      text-decoration: underline;
-    }
+<div class="translator-card">
 
-    .main-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 90vh;
-    }
+<p class="speech-note">
+Click start to record speech. Click stop when finished.
+</p>
 
-    .card {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
+<div class="record-controls">
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #00332d;
-    }
+<button id="startBtn" class="record-btn">
+Start Recording
+</button>
 
-    button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      background-color: #00796b;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      margin: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
+<button id="stopBtn" class="record-btn stop">
+Stop Recording
+</button>
 
-    button:hover {
-      background-color: #004d40;
-      transform: scale(1.05);
-    }
+</div>
 
-    #recording-indicator {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: red;
-      margin-bottom: 10px;
-    }
+<p id="recordStatus"></p>
 
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #004d40;
-    }
-  </style>
-</head>
-<body>
+<p id="speechText"></p>
 
-  <nav>
-    <div style="display: flex; align-items: center;">
-      <a href="/">🏠 Home</a>
-    </div>
-    <div>
-      <a href="/isl">ISL</a>
-      <a href="/asl">ASL</a>
-    </div>
-  </nav>
+</div>
 
-  <div class="main-content">
-    <div class="card">
-      <h2>Speech to ISL Translator</h2>
-      <div id="recording-indicator" style="display: none;">🎙️ Recording...</div>
-      <button onclick="isl_startRecording()">Start Recording</button>
-      <button onclick="isl_stopRecording()">Stop Recording</button>
-      <p id="status"></p>
-    </div>
-  </div>
+</section>
 
-  <script>
-    const recordingIndicator = document.getElementById("recording-indicator");
-    const status = document.getElementById("status");
+<script>
 
-    async function isl_startRecording() {
-      recordingIndicator.style.display = "block";
-      status.textContent = "Recording...";
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const recordStatus = document.getElementById("recordStatus");
+const speechText = document.getElementById("speechText");
 
-      try {
-        const response = await fetch("/isl_start_recording", {
-          method: "POST"
-        });
+startBtn.addEventListener("click", async () => {
 
-        if (response.ok) {
-          status.textContent = "Recording started.";
-        } else {
-          status.textContent = "❌ Error starting recording.";
-        }
-      } catch (error) {
-        console.error(error);
-        status.textContent = "❌ Could not connect to server.";
-      }
-    }
+recordStatus.textContent = "Recording...";
 
-    async function isl_stopRecording() {
-      recordingIndicator.style.display = "none";
-      status.textContent = "Processing...";
+try{
 
-      try {
-        const response = await fetch("/isl_stop_recording", {
-          method: "POST"
-        });
+const response = await fetch("/isl_start_recording",{
+method:"POST"
+});
 
-        const result = await response.json();
+const result = await response.json();
+recordStatus.textContent = result.status;
 
-        if (response.ok) {
-          status.textContent = `Translation complete: ${result.text}`;
-        } else {
-          status.textContent = "❌ Error: Translation failed.";
-        }
-      } catch (error) {
-        console.error(error);
-        status.textContent = "❌ Could not connect to server.";
-      }
-    }
-  </script>
+}catch(error){
+recordStatus.textContent = "Could not start recording.";
+}
 
-</body>
-</html>
+});
+
+
+stopBtn.addEventListener("click", async () => {
+
+recordStatus.textContent = "Processing...";
+
+try{
+
+const response = await fetch("/isl_stop_recording",{
+method:"POST"
+});
+
+const result = await response.json();
+
+if(response.ok){
+speechText.textContent = "Recognized Speech: " + result.text;
+recordStatus.textContent = result.status;
+}else{
+recordStatus.textContent = "Translation failed.";
+}
+
+}catch(error){
+recordStatus.textContent = "Server connection failed.";
+}
+
+});
+
+</script>
+
+{% endblock %}

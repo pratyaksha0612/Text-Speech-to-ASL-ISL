@@ -1,76 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ASL Options</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #b2dfdb, #80cbc4);
-        }
+{% extends 'base.html' %}
+{% block content %}
 
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 90vh;
-        }
+<section class="isl-page">
 
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: #00332d;
-        }
+<div class="isl-container">
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px 60px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+<!-- LEFT SIDE -->
 
-        .card button {
-            background-color: #00796b;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            margin: 10px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
-        }
+<div class="isl-left">
 
-        .card button:hover {
-            background-color: #004d40;
-            transform: scale(1.05);
-        }
+<img src="{{ url_for('static', filename='asl-logo.png') }}" class="isl-logo">
 
-        nav a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <nav style="background-color: #001f1f; padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; align-items: center;">
-            <a href="/" style="text-decoration: none; color: white; font-size: 1.2rem;">🏠 Home</a>
-        </div>
-        <div>
-            <a href="/isl" style="text-decoration: none; color: white; margin-right: 20px; font-size: 1.1rem;">ISL</a>
-            <a href="/asl" style="text-decoration: none; color: white; font-size: 1.1rem;">ASL</a>
-        </div>
-    </nav>
+<p class="isl-description">
+Explore American Sign Language translation using text or speech input.
+Choose a mode below to begin.
+</p>
 
-    <div class="main-content">
-        <h2>Select Input Type for ASL</h2>
-        <div class="card">
-            <button onclick="location.href='/asl_text'">Text to ASL</button>
-            <button onclick="location.href='/asl_speech'">Speech to ASL</button>
-        </div>
-    </div>
-</body>
-</html>
+<div class="isl-buttons">
+
+<a href="/asl_text" class="isl-btn">TEXT</a>
+
+<a href="/asl_speech" class="isl-btn">SPEECH</a>
+
+</div>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="isl-right">
+
+
+<video id="aslVideo" class="isl-video" autoplay muted playsinline></video>
+
+<div class="alphabet-bar" id="aslAlphabetBar"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<script>
+
+const video = document.getElementById("aslVideo");
+const alphabetBar = document.getElementById("aslAlphabetBar");
+
+const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+
+let index = 0;
+let referenceMode = true;
+
+
+/* CREATE ALPHABET BUTTONS */
+
+letters.forEach((letter,i)=>{
+
+const btn = document.createElement("span");
+
+btn.innerText = letter.toUpperCase();
+
+btn.onclick = ()=>{
+
+playLetter(i);
+
+};
+
+alphabetBar.appendChild(btn);
+
+});
+
+
+/* HIGHLIGHT LETTER */
+
+function highlight(activeIndex){
+
+const buttons = alphabetBar.children;
+
+for(let i=0;i<buttons.length;i++){
+buttons[i].classList.remove("active");
+}
+
+buttons[activeIndex].classList.add("active");
+
+}
+
+
+/* REFERENCE LOOP */
+
+function playReference(){
+
+referenceMode = true;
+
+video.src = "/asl_dataset/" + letters[index] + ".mp4";
+
+highlight(index);
+
+video.play();
+
+index++;
+
+if(index >= letters.length){
+index = 0;
+}
+
+}
+
+
+/* PLAY SINGLE LETTER */
+
+function playLetter(letterIndex){
+
+referenceMode = false;
+
+video.src = "/asl_dataset/" + letters[letterIndex] + ".mp4";
+
+highlight(letterIndex);
+
+video.play();
+
+}
+
+
+/* REMOVE GAP AS MUCH AS POSSIBLE */
+
+video.addEventListener("timeupdate",()=>{
+
+if(video.duration - video.currentTime < 0.03){
+
+if(referenceMode){
+
+playReference();
+
+}
+else{
+
+referenceMode = true;
+playReference();
+
+}
+
+}
+
+});
+
+
+/* START */
+
+playReference();
+
+</script>
+
+{% endblock %}
