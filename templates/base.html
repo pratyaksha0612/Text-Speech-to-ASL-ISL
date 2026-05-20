@@ -24,16 +24,13 @@
 <div class="nav-container">
 
 <div class="nav-left">
-
-<img src="{{ url_for('static', filename='logo-main.png') }}" class="nav-logo">
-
-<span class="nav-title">VYAKT</span>
-
+<a href="/" class="logo-link">
+    <img src="{{ url_for('static', filename='logo-main.png') }}" class="nav-logo">
+    <span class="nav-title">VYAKT</span>
+</a>
 </div>
 
-
 <div class="nav-right">
-
 <a href="/">Home</a>
 <a href="/about">About</a>
 <a href="/creator">Creator</a>
@@ -42,14 +39,8 @@
 <a href="/#faq">FAQ</a>
 
 </div>
-
-
 </div>
-
 </nav>
-
-
-
 
 <main>
 
@@ -59,7 +50,30 @@
 
 </main>
 
+<footer class="footer">
 
+    <div class="footer-container">
+
+        <div class="footer-left">
+            <h2>VYAKT</h2>
+            <p>Making communication accessible through technology.</p>
+        </div>
+
+        <div class="footer-right">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/creator">Creator</a>
+            <a href="/asl">ASL</a>
+            <a href="/isl">ISL</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 VYAKT. All rights reserved.
+    </div>
+
+</footer>
 
 <script>
 
@@ -180,9 +194,8 @@ requestAnimationFrame(animate);
 animate();
 
 </script>
+
 <script>
-
-
 let lastScroll = 0;
 
 const nav = document.querySelector("nav");
