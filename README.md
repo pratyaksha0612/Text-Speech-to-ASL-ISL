@@ -1,4 +1,4 @@
-# Vyakta — Text and Speech to Sign Language Translator
+# Vyakta - Text and Speech to Sign Language Translator
 
 **Vyakta (व्यक्त)** is a Sanskrit word meaning **"expressed"** or **"made visible."**  
 This project embodies that meaning by converting **text and speech into visual sign language**, enabling communication accessibility through expression.
