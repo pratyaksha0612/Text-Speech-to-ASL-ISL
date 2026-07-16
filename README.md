@@ -7,13 +7,13 @@ Vyakta is a web-based application that translates **Text and Speech into Indian 
 
 It is designed to support accessibility, assist learning, and bridge communication gaps between the hearing and the deaf community.
 
----
+
 
 # Demo
 
 A demonstration of the project is available in:
 
----
+
 
 # Features
 
@@ -38,7 +38,7 @@ A demonstration of the project is available in:
 
 • Modern, dynamic web interface
 
----
+
 
 # How It Works
 
@@ -61,7 +61,7 @@ A demonstration of the project is available in:
 
 6. Corresponding sign language videos are played sequentially
 
----
+
 
 # Project Structure
 
@@ -99,7 +99,7 @@ Vyakta/
 │
 └── DEMO.mp4
 
----
+
 
 # Installation
 
@@ -110,7 +110,7 @@ git clone https://github.com/pratyaksha0612/Text-Speech-to-ASL-ISL.git
 cd Text-Speech-to-ASL-ISL
 
 
----
+
 
 ## Step 2 — Install Dependencies
 
@@ -121,7 +121,7 @@ pip install scipy
 pip install SpeechRecognition
 
 
----
+
 
 # Running the Application
 
@@ -133,7 +133,7 @@ Open browser and go to:
 http://127.0.0.1:5000/
 
 
----
+
 
 # Technologies Used
 
@@ -145,7 +145,7 @@ HTML
 CSS  
 JavaScript  
 
----
+
 
 # Purpose
 
@@ -159,7 +159,7 @@ Vyakta aims to:
 
 • Convert speech into visual expression
 
----
+
 
 # Meaning of Name
 
@@ -175,7 +175,7 @@ This reflects the core goal of the project:
 
 Converting speech and text into visible communication.
 
----
+
 
 # Future Improvements
 
@@ -189,7 +189,7 @@ Converting speech and text into visible communication.
 
 • Mobile application version
 
----
+
 
 # Author
 
@@ -197,7 +197,7 @@ Pratyaksha Singh
 B.Tech CSE — AI & ML  
 VIT Bhopal University
 
----
+
 
 # License
 
