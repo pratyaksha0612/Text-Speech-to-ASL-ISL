@@ -1,6 +1,5 @@
 import os
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import speech_recognition as sr
 import texttoasl
 import speechtoasl
 import texttoisl
