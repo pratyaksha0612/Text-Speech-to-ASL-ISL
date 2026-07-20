@@ -61,16 +61,16 @@
 
   <section class="works-section">
     <div class="works-header">
-      <h2 class="works-title">How Vyakt Works</h2>
+      <h2 class="works-title">How VYAKT Works</h2>
 
-      <p class="works-subtitle">Vyakt transforms language into visual communication - preserving meaning, emotion, and accessibility in real time.</p>
+      <p class="works-subtitle">VYAKT transforms language into visual communication - preserving meaning, emotion, and accessibility in real time.</p>
     </div>
 
     <div class="works-grid">
       <div class="work-card">
         <h3>Speech → Sign</h3>
 
-        <p>Vyakt listens to spoken language, understands it, and instantly renders it into sign language visuals.
+        <p>VYAKT listens to spoken language, understands it, and instantly renders it into sign language visuals.
           This allows conversations to happen naturally, without requiring reading or interpretation.</p>
       </div>
 
@@ -85,7 +85,7 @@
         <h3>Real-Time Translation</h3>
 
         <p>Built for live interaction - enabling inclusive conversations in classrooms, meetings, and everyday life.
-          Vyakt is designed to evolve into seamless real-time communication.</p>
+          VYAKT is designed to evolve into seamless real-time communication.</p>
       </div>
     </div>
   </section>
@@ -93,56 +93,107 @@
   <section id="faq" class="faq-section">
     <div class="faq-header">
       <h2 class="faq-title">Frequently Asked Questions</h2>
-
-      <p class="faq-subtitle">Everything about Vyakt, its purpose, and its future.</p>
+      <p class="faq-subtitle">Everything about VYAKT, its purpose, and its future.</p>
     </div>
 
     <div class="faq-list">
       <div class="faq-item">
         <button class="faq-question">
-          <span>How is Vyakt useful if text is already visible?</span>
-
+          <span>How is VYAKT useful if text is already visible?</span>
           <span class="faq-plus"></span>
         </button>
-
         <div class="faq-answer">
-          <p>Sign language is visual, not textual. Vyakt transforms language into visual expression, allowing communication in its natural form instead of forcing reliance on reading.</p>
+          <p>Sign language is a natural visual language with its own grammar and structure, distinct from text. VYAKT translates text and speech into sign configurations, allowing users to communicate in their native primary visual form.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>Does Vyakt work in real time?</span>
-
+          <span>How does the local Speech Translator work?</span>
           <span class="faq-plus"></span>
         </button>
-
         <div class="faq-answer">
-          <p>Vyakt is being developed toward real-time translation, enabling live conversations, meetings, and accessible digital communication.</p>
+          <p>VYAKT leverages browser-native speech recognition APIs. Speech is converted to text locally on your device in real time, and the system matches the text to our database of high-quality sign language videos instantly.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>Who can benefit from Vyakt?</span>
-
+          <span>Can I adjust the speed of sign playback?</span>
           <span class="faq-plus"></span>
         </button>
-
         <div class="faq-answer">
-          <p>Students, professionals, educators, and anyone interacting with sign language users.</p>
+          <p>Yes. Every translator page features a playback speed slider allowing you to adjust the frame pace from 0.25x (slower pacing, ideal for learning) up to 2.00x (faster pacing for native signers).</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>Does Vyakt support ASL and ISL?</span>
-
+          <span>What is the difference between ASL and ISL?</span>
           <span class="faq-plus"></span>
         </button>
-
         <div class="faq-answer">
-          <p>Yes. Vyakt supports both American and Indian Sign Language.</p>
+          <p>ASL (American Sign Language) is primarily used in North America and employs a one-handed manual alphabet. ISL (Indian Sign Language) is standardized by the ISLRTC in India and utilizes distinctive two-handed configurations and gestures.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Who is Ashi?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>Ashi is VYAKT's built-in conversational companion. She is designed to guide you through the platform, resolve your queries about the system's usage, and answer questions about sign language accessibility in multiple languages.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Does VYAKT require a high-end GPU for sign detection?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>No. By offloading processing dynamically, VYAKT runs real-time sign detection on standard CPUs in web browsers using optimized MediaPipe landmark keypoint coordinates combined with a Random Forest classifier.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What models are used under the hood for ASL Detection?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>VYAKT's sign detection portal integrates a Random Forest Classifier trained on preprocessed MediaPipe landmark vectors, utilizing normalized coordinate points and wrist angles for high precision.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Can I use the ASL detector for full sentences?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>The real-time detector is currently optimized to recognize static ASL alphabet gestures letter-by-letter. Word building is supported via hold gestures, and sentence autocomplete engines are planned for subsequent phases.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How does the Text-to-Sign translation engine work?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>The translation engine parses input sentences, extracts key sign markers, retrieves corresponding sign video segments, and stitches them together for a seamless sequential sign playback with adjustable speed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What is the future vision for VYAKT?</span>
+          <span class="faq-plus"></span>
+        </button>
+        <div class="faq-answer">
+          <p>The long-term vision of VYAKT is to expand into a universal communication extension for video conferencing platforms, allowing real-time, zero-latency sign-to-speech and speech-to-sign translations globally.</p>
         </div>
       </div>
     </div>

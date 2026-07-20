@@ -3,6 +3,11 @@
 
 <section class="translator-page">
 
+<a href="/isl" class="back-portal-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to ISL Options
+</a>
+
 <h1 class="translator-title">ISL Speech Translator</h1>
 
 <div class="translator-card">
@@ -23,12 +28,23 @@ Stop Recording
 
 </div>
 
+<div class="speed-control-container" style="margin: 25px 0 15px; text-align: left; background: rgba(255, 255, 255, 0.05); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
+    <label for="speedSlider" style="display: block; font-size: 16px; font-weight: 500; color: #4fc3f7; margin-bottom: 8px;">
+        Playback Speed: <span id="speedValue" style="color: white; font-weight: bold;">1.00x</span>
+    </label>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 12px; opacity: 0.6;">0.25x (Slower)</span>
+        <input type="range" id="speedSlider" min="0.25" max="2.0" step="0.05" value="1.0" style="flex-grow: 1; accent-color: #4fc3f7; cursor: pointer;">
+        <span style="font-size: 12px; opacity: 0.6;">2.00x (Faster)</span>
+    </div>
+</div>
+
 <p id="recordStatus"></p>
 
 <p id="speechText"></p>
 
-</div>
 
+</div>
 </section>
 
 <script>
@@ -37,50 +53,187 @@ const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const recordStatus = document.getElementById("recordStatus");
 const speechText = document.getElementById("speechText");
+const speedSlider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
+const videoModal = document.getElementById("videoModal");
+const translationVideo = document.getElementById("translationVideo");
+const currentSignLabel = document.getElementById("currentSignLabel");
+const modalSpeedValue = document.getElementById("modalSpeedValue");
+
+let playQueue = [];
+let queueIndex = 0;
+
+speedSlider.addEventListener("input", function() {
+    const val = parseFloat(this.value);
+    speedValue.textContent = val.toFixed(2) + "x";
+    modalSpeedValue.textContent = val.toFixed(2) + "x";
+    if (translationVideo) {
+        translationVideo.playbackRate = val;
+    }
+});
+
+function openVideoModal() {
+    const title = document.getElementById("modalTitle");
+    if (title) title.textContent = "ISL Translation";
+    videoModal.style.display = "flex";
+    setTimeout(() => {
+        videoModal.style.opacity = "1";
+    }, 10);
+}
+
+function closeVideoModal() {
+    videoModal.style.opacity = "0";
+    translationVideo.pause();
+    setTimeout(() => {
+        videoModal.style.display = "none";
+    }, 300);
+}
+
+function playNext() {
+    if (queueIndex < playQueue.length) {
+        const videoUrl = playQueue[queueIndex];
+        const isSpace = videoUrl.includes("blank.mp4");
+        
+        // Mute video completely
+        translationVideo.muted = true;
+        translationVideo.volume = 0;
+        
+        const userSpeed = parseFloat(speedSlider.value);
+        // Fast-forward space (blank.mp4) to 3.5x speed for a brief 0.25s pause
+        const activeSpeed = isSpace ? Math.max(3.5, userSpeed * 3) : userSpeed;
+        
+        translationVideo.src = videoUrl;
+        
+        // Show letter label
+        const parts = videoUrl.split('/');
+        const filename = parts[parts.length - 1];
+        const letter = filename.split('.')[0];
+        if (isSpace || letter === 'blank') {
+            currentSignLabel.textContent = "[Space]";
+        } else {
+            currentSignLabel.textContent = `Signing: ${letter.toUpperCase()}`;
+        }
+        
+        translationVideo.onloadedmetadata = function() {
+            translationVideo.playbackRate = activeSpeed;
+            translationVideo.play().catch(() => {});
+        };
+        
+        queueIndex++;
+    } else {
+        recordStatus.textContent = "Translation complete!";
+        currentSignLabel.textContent = "Translation Complete";
+        closeVideoModal();
+    }
+}
+
+translationVideo.onended = playNext;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let lastSpeechText = "";
+
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-IN'; // Indian accent focus for ISL
+
+    recognition.onstart = function() {
+        lastSpeechText = "";
+        recordStatus.innerHTML = "<span style='color:#4fc3f7;font-weight:bold;'>🎙️ Listening... Speak now.</span>";
+        speechText.textContent = "Listening...";
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Speech Recognition Error:", event.error);
+        if (event.error === 'not-allowed') {
+            recordStatus.textContent = "❌ Microphone blocked. Please allow mic permissions in browser.";
+        } else {
+            recordStatus.textContent = "⚠️ Notice: " + event.error;
+        }
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+    };
+
+    recognition.onresult = function(event) {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            transcript += event.results[i][0].transcript;
+        }
+        if (transcript.trim()) {
+            lastSpeechText = transcript.trim();
+            speechText.textContent = "Recognized Speech: " + lastSpeechText;
+        }
+    };
+
+    recognition.onend = function() {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        if (lastSpeechText) {
+            translateRecognizedSpeech(lastSpeechText);
+        } else {
+            recordStatus.textContent = "Stopped. Click Start Recording and speak.";
+        }
+    };
+} else {
+    recordStatus.textContent = "⚠️ Web Speech API is not supported in this browser. Please use Chrome, Edge, or Safari.";
+}
+
+async function translateRecognizedSpeech(text) {
+    recordStatus.textContent = "Translating speech...";
+    const speed = parseFloat(speedSlider.value);
+    try {
+        const response = await fetch("/Itranslate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: text })
+        });
+        const result = await response.json();
+        if (response.ok && result.videos && result.videos.length > 0) {
+            recordStatus.textContent = "Translation complete!";
+            playQueue = result.videos;
+            queueIndex = 0;
+            modalSpeedValue.textContent = speed.toFixed(2) + "x";
+            openVideoModal();
+            playNext();
+        } else {
+            recordStatus.textContent = "❌ No matching ISL signs found for: " + text;
+        }
+    } catch (e) {
+        recordStatus.textContent = "❌ Failed to connect to server.";
+    }
+}
 
 startBtn.addEventListener("click", async () => {
-
-recordStatus.textContent = "Recording...";
-
-try{
-
-const response = await fetch("/isl_start_recording",{
-method:"POST"
+    translationVideo.pause();
+    // Prompt microphone permission
+    try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+    } catch (err) {
+        console.warn("Mic permission check warning:", err);
+    }
+    
+    if (!recognition) {
+        recordStatus.textContent = "⚠️ Speech Recognition is not supported in this browser.";
+        return;
+    }
+    try {
+        recognition.start();
+    } catch (e) {
+        console.warn("Recognition start warning:", e);
+    }
 });
 
-const result = await response.json();
-recordStatus.textContent = result.status;
-
-}catch(error){
-recordStatus.textContent = "Could not start recording.";
-}
-
-});
-
-
-stopBtn.addEventListener("click", async () => {
-
-recordStatus.textContent = "Processing...";
-
-try{
-
-const response = await fetch("/isl_stop_recording",{
-method:"POST"
-});
-
-const result = await response.json();
-
-if(response.ok){
-speechText.textContent = "Recognized Speech: " + result.text;
-recordStatus.textContent = result.status;
-}else{
-recordStatus.textContent = "Translation failed.";
-}
-
-}catch(error){
-recordStatus.textContent = "Server connection failed.";
-}
-
+stopBtn.addEventListener("click", () => {
+    if (recognition) {
+        recognition.stop();
+        recordStatus.textContent = "Processing speech...";
+    }
 });
 
 </script>

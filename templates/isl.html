@@ -7,141 +7,175 @@
 
 <!-- LEFT SIDE -->
 <div class="isl-left">
-
-<img src="{{ url_for('static', filename='isl-logo.png') }}" class="isl-logo">
-
-<p class="isl-description">
-Explore Indian Sign Language translation using text or speech input.
-Choose a mode below to begin.
-</p>
-
-<div class="isl-buttons">
-<a href="/isl_text" class="isl-btn">TEXT</a>
-<a href="/isl_speech" class="isl-btn">SPEECH</a>
+    <img src="{{ url_for('static', filename='isl-logo.png') }}" class="isl-logo">
+    <p class="isl-description">
+        Explore Indian Sign Language translation using text or speech input.
+        Choose a mode below to begin.
+    </p>
+    <div class="isl-buttons">
+        <a href="/isl_text" class="isl-btn">TEXT</a>
+        <a href="/isl_speech" class="isl-btn">SPEECH</a>
+    </div>
 </div>
-
-</div>
-
 
 <!-- RIGHT SIDE -->
 <div class="isl-right">
-
-<video id="islVideo" class="isl-video" autoplay muted playsinline></video>
-
-<div class="alphabet-bar" id="alphabetBar"></div>
+    <video id="islVideo" class="isl-video" autoplay muted playsinline></video>
+    <div class="alphabet-bar" id="alphabetBar"></div>
+</div>
 
 </div>
 
+<!-- Educational Details Block -->
+<div style="margin-top: 60px; padding: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; backdrop-filter: blur(10px); text-align: left;">
+    <h2 style="color: #4fc3f7; border-bottom: 2px solid rgba(79, 195, 247, 0.3); padding-bottom: 10px; margin-top: 0; margin-bottom: 25px; font-size: 26px; font-weight: 600;">Understanding Indian Sign Language (ISL)</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+            <h3 style="color: #4fc3f7; margin-top: 0; margin-bottom: 12px; font-size: 18px;">Origin & Standardization</h3>
+            <p style="font-size: 14px; opacity: 0.85; line-height: 1.6; margin: 0;">
+                ISL is a natural visual language co-developed by deaf schools and associations across India. Standardized by the <strong>Indian Sign Language Research and Training Centre (ISLRTC)</strong>, it serves as the primary visual language of the Indian deaf community, featuring its own complete grammar rules.
+            </p>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+            <h3 style="color: #4fc3f7; margin-top: 0; margin-bottom: 12px; font-size: 18px;">Linguistic Differences</h3>
+            <p style="font-size: 14px; opacity: 0.85; line-height: 1.6; margin: 0;">
+                Unlike ASL which is a one-handed system, ISL primarily utilizes a <strong>two-handed fingerspelling system</strong> for letters, along with distinct hand configurations, facial expressions, and spatial positioning. Standardized dictionaries by ISLRTC now catalog thousands of visual signs.
+            </p>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+            <h3 style="color: #4fc3f7; margin-top: 0; margin-bottom: 12px; font-size: 18px;">Interactive A-Z Reference</h3>
+            <p style="font-size: 14px; opacity: 0.85; line-height: 1.6; margin: 0;">
+                The A-Z reference tool below plays the corresponding ISL sign videos. Click any button or hover over the grid cards below to see the two-handed fingerspelling configurations for letters A through Z.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive A-Z Sign Video Grid -->
+<div style="margin-top:40px;padding:36px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;backdrop-filter:blur(10px);">
+    <h3 style="color:#4fc3f7;text-align:center;margin:0 0 8px;font-size:22px;font-weight:700;">A – Z Sign Reference</h3>
+    <p style="text-align:center;opacity:.7;font-size:14px;margin:0 0 28px;">Hover a card to preview &bull; Click to replay from start</p>
+    <div id="isl-sign-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:12px;"></div>
 </div>
 
 </section>
 
-
 <script>
-
 const video = document.getElementById("islVideo");
 const alphabetBar = document.getElementById("alphabetBar");
-
 const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
 let index = 0;
 let referenceMode = true;
 
-
-/* ---------- CREATE ALPHABET BUTTONS ---------- */
-
-letters.forEach((letter,i)=>{
-
-const btn = document.createElement("span");
-
-btn.innerText = letter.toUpperCase();
-
-btn.onclick = ()=>{
-
-playLetter(i);
-
-};
-
-alphabetBar.appendChild(btn);
-
+// Create alphabet buttons in the bar
+letters.forEach((letter, i) => {
+    const btn = document.createElement("span");
+    btn.innerText = letter.toUpperCase();
+    btn.onclick = () => {
+        playLetter(i);
+    };
+    alphabetBar.appendChild(btn);
 });
 
-
-/* ---------- HIGHLIGHT FUNCTION ---------- */
-
-function highlight(activeIndex){
-
-const buttons = alphabetBar.children;
-
-for(let i=0;i<buttons.length;i++){
-buttons[i].classList.remove("active");
+function highlight(activeIndex) {
+    const buttons = alphabetBar.children;
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("active");
+    }
+    if (buttons[activeIndex]) {
+        buttons[activeIndex].classList.add("active");
+    }
 }
 
-buttons[activeIndex].classList.add("active");
-
+function playReference() {
+    referenceMode = true;
+    video.src = "/isl_dataset/" + letters[index] + ".mp4";
+    highlight(index);
+    video.load();
+    video.onloadeddata = () => video.play();
+    index++;
+    if (index >= letters.length) {
+        index = 0;
+    }
 }
 
-
-/* ---------- PLAY REFERENCE LOOP ---------- */
-
-function playReference(){
-
-referenceMode = true;
-
-video.src = "/isl_dataset/" + letters[index] + ".mp4";
-
-highlight(index);
-
-video.play();
-
-index++;
-
-if(index >= letters.length){
-index = 0;
+function playLetter(letterIndex) {
+    referenceMode = false;
+    video.src = "/isl_dataset/" + letters[letterIndex] + ".mp4";
+    highlight(letterIndex);
+    video.load();
+    video.onloadeddata = () => video.play();
 }
 
-}
-
-
-/* ---------- PLAY SPECIFIC LETTER ---------- */
-
-function playLetter(letterIndex){
-
-referenceMode = false;
-
-video.src = "/isl_dataset/" + letters[letterIndex] + ".mp4";
-
-highlight(letterIndex);
-
-video.play();
-
-}
-
-
-
-video.addEventListener("timeupdate",()=>{
-
-if(video.duration - video.currentTime < 0.01){
-
-if(referenceMode){
-
-playReference();
-
-}
-else{
-
-referenceMode = true;
-
-playReference();
-
-}
-
-}
-
+video.addEventListener("timeupdate", () => {
+    if (video.duration - video.currentTime < 0.05) {
+        if (referenceMode) {
+            playReference();
+        } else {
+            referenceMode = true;
+            playReference();
+        }
+    }
 });
 
+// Setup interactive A-Z grid
+(function() {
+    const grid = document.getElementById('isl-sign-grid');
+    letters.forEach(function(l) {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;text-align:center;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;';
+
+        const vid = document.createElement('video');
+        vid.src = '/isl_dataset/' + l + '.mp4';
+        vid.muted = true;
+        vid.loop = true;
+        vid.playsInline = true;
+        vid.preload = 'metadata';
+        vid.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#000;';
+
+        const lbl = document.createElement('div');
+        lbl.textContent = l.toUpperCase();
+        lbl.style.cssText = 'color:#4fc3f7;font-weight:800;font-size:17px;padding:5px 0 6px;background:rgba(0,0,0,.35);letter-spacing:1px;';
+
+        card.appendChild(vid);
+        card.appendChild(lbl);
+
+        vid.addEventListener('loadedmetadata', function() {
+            if (vid.duration) {
+                vid.currentTime = vid.duration - 0.05;
+            }
+        });
+
+        card.onmouseenter = function() {
+            card.style.borderColor = '#4fc3f7';
+            card.style.boxShadow = '0 0 15px rgba(79,195,247,.3)';
+            card.style.transform = 'translateY(-4px)';
+            vid.play();
+        };
+
+        card.onmouseleave = function() {
+            card.style.borderColor = 'rgba(255,255,255,.08)';
+            card.style.boxShadow = 'none';
+            card.style.transform = 'none';
+            vid.pause();
+            if (vid.duration) {
+                vid.currentTime = vid.duration - 0.05;
+            }
+        };
+
+        card.onclick = function() {
+            vid.currentTime = 0;
+            vid.play();
+        };
+
+        grid.appendChild(card);
+    });
+})();
 
 playReference();
-
 </script>
 {% endblock %}

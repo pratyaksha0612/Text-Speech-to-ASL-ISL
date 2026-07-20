@@ -4,6 +4,11 @@
 
 <section class="translator-page">
 
+<a href="/asl" class="back-portal-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to ASL Options
+</a>
+
 <h1 class="translator-title">Text → ASL Translator</h1>
 
 <div class="translator-card">
@@ -16,6 +21,17 @@ placeholder="Enter text to translate into American Sign Language..."
 required
 ></textarea>
 
+<div class="speed-control-container" style="margin: 20px 0; text-align: left; background: rgba(255, 255, 255, 0.05); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
+    <label for="speedSlider" style="display: block; font-size: 16px; font-weight: 500; color: #4fc3f7; margin-bottom: 8px;">
+        Playback Speed: <span id="speedValue" style="color: white; font-weight: bold;">1.00x</span>
+    </label>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 12px; opacity: 0.6;">0.25x (Slower)</span>
+        <input type="range" id="speedSlider" min="0.25" max="2.0" step="0.05" value="1.0" style="flex-grow: 1; accent-color: #4fc3f7; cursor: pointer;">
+        <span style="font-size: 12px; opacity: 0.6;">2.00x (Faster)</span>
+    </div>
+</div>
+
 <button type="submit" class="translate-btn">
 Translate
 </button>
@@ -24,23 +40,109 @@ Translate
 
 <p id="status"></p>
 
+
+
 </div>
 
 </section>
-
 
 <script>
 
 const form = document.getElementById("translateForm");
 const status = document.getElementById("status");
+const speedSlider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
+const videoModal = document.getElementById("videoModal");
+const translationVideo = document.getElementById("translationVideo");
+const currentSignLabel = document.getElementById("currentSignLabel");
+const modalSpeedValue = document.getElementById("modalSpeedValue");
+
+let playQueue = [];
+let queueIndex = 0;
+
+speedSlider.addEventListener("input", function() {
+    const val = parseFloat(this.value);
+    speedValue.textContent = val.toFixed(2) + "x";
+    modalSpeedValue.textContent = val.toFixed(2) + "x";
+    if (translationVideo) {
+        translationVideo.playbackRate = val;
+    }
+});
+
+function openVideoModal() {
+    const title = document.getElementById("modalTitle");
+    if (title) title.textContent = "ASL Translation";
+    videoModal.style.display = "flex";
+    setTimeout(() => {
+        videoModal.style.opacity = "1";
+    }, 10);
+}
+
+function closeVideoModal() {
+    videoModal.style.opacity = "0";
+    translationVideo.pause();
+    setTimeout(() => {
+        videoModal.style.display = "none";
+    }, 300);
+}
+
+function playNext() {
+    if (queueIndex < playQueue.length) {
+        const videoUrl = playQueue[queueIndex];
+        const isSpace = videoUrl.includes("blank.mp4");
+        
+        // Mute video completely
+        translationVideo.muted = true;
+        translationVideo.volume = 0;
+        
+        const userSpeed = parseFloat(speedSlider.value);
+        // Fast-forward space (blank.mp4) to 3.5x speed for a brief 0.25s pause
+        const activeSpeed = isSpace ? Math.max(3.5, userSpeed * 3) : userSpeed;
+        
+        translationVideo.src = videoUrl;
+        
+        // Show letter label
+        const parts = videoUrl.split('/');
+        const filename = parts[parts.length - 1];
+        const letter = filename.split('.')[0];
+        if (isSpace || letter === 'blank') {
+            currentSignLabel.textContent = "[Space]";
+        } else {
+            currentSignLabel.textContent = `Signing: ${letter.toUpperCase()}`;
+        }
+        
+        translationVideo.onloadedmetadata = function() {
+            translationVideo.playbackRate = activeSpeed;
+            translationVideo.play().catch(() => {});
+        };
+        
+        queueIndex++;
+    } else {
+        status.innerText = "Translation complete!";
+        currentSignLabel.textContent = "Translation Complete";
+        closeVideoModal();
+    }
+}
+
+translationVideo.onended = playNext;
+
+const inputText = document.getElementById("inputText");
+inputText.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.dispatchEvent(new Event("submit"));
+    }
+});
 
 form.addEventListener("submit", async function(e){
 
 e.preventDefault();
 
 const text = document.getElementById("inputText").value;
+const speed = parseFloat(speedSlider.value);
 
 status.innerText = "Translating...";
+translationVideo.pause();
 
 try{
 
@@ -52,15 +154,24 @@ headers:{
 "Content-Type":"application/json"
 },
 
-body: JSON.stringify({ text:text })
+body: JSON.stringify({ text:text, speed:speed })
 
 });
+
 
 if(response.ok){
 
 const result = await response.json();
 
 status.innerText = result.status;
+
+if (result.videos && result.videos.length > 0) {
+    playQueue = result.videos;
+    queueIndex = 0;
+    modalSpeedValue.textContent = speed.toFixed(2) + "x";
+    openVideoModal();
+    playNext();
+}
 
 }else{
 

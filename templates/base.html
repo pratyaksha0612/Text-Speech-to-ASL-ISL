@@ -1,245 +1,633 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-
-<meta charset="UTF-8">
-
-<title>VYAKT</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <title>VYAKT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 
 <body>
 
+    <div class="galaxy"></div>
+    <canvas id="starfield"></canvas>
 
-<div class="galaxy"></div>
-
-<canvas id="starfield"></canvas>
-
-
-
-<nav>
-
-<div class="nav-container">
-
-<div class="nav-left">
-<a href="/" class="logo-link">
-    <img src="{{ url_for('static', filename='logo-main.png') }}" class="nav-logo">
-    <span class="nav-title">VYAKT</span>
-</a>
-</div>
-
-<div class="nav-right">
-<a href="/">Home</a>
-<a href="/about">About</a>
-<a href="/creator">Creator</a>
-<a href="/isl">ISL</a>
-<a href="/asl">ASL</a>
-<a href="/#faq">FAQ</a>
-
-</div>
-</div>
-</nav>
-
-<main>
-
-{% block content %}
-
-{% endblock %}
-
-</main>
-
-<footer class="footer">
-
-    <div class="footer-container">
-
-        <div class="footer-left">
-            <h2>VYAKT</h2>
-            <p>Making communication accessible through technology.</p>
+    <!-- Global Centered Video Popup Modal (Parsed First & Center Aligned) -->
+    <div id="videoModal"
+        style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(16px);z-index:100000;justify-content:center;align-items:center;opacity:0;transition:opacity .3s ease;">
+        <div
+            style="background:rgba(11,29,58,.97);border:2px solid rgba(79,195,247,.5);box-shadow:0 0 60px rgba(79,195,247,.45);border-radius:22px;padding:30px;width:min(440px,94vw);text-align:center;position:relative;">
+            <button onclick="closeVideoModal()"
+                style="position:absolute;top:14px;right:18px;background:none;border:none;color:white;font-size:30px;cursor:pointer;opacity:.7;outline:none;line-height:1;">&times;</button>
+            <h3 id="modalTitle" style="color:white;margin:0 0 20px;font-size:21px;font-weight:700;">Sign Translation
+            </h3>
+            <div
+                style="background:#000;border-radius:14px;overflow:hidden;width:100%;aspect-ratio:1;margin:0 auto;border:1px solid rgba(255,255,255,.1);">
+                <video id="translationVideo" style="width:100%;height:100%;background:#000;display:block;"></video>
+            </div>
+            <div id="currentSignLabel"
+                style="margin-top:14px;font-size:19px;color:#4fc3f7;font-weight:700;text-transform:uppercase;min-height:24px;letter-spacing:1px;">
+            </div>
+            <div style="margin-top:12px;color:rgba(255,255,255,.65);font-size:14px;">Speed: <span id="modalSpeedValue"
+                    style="color:#4fc3f7;font-weight:700;">1.00x</span></div>
         </div>
-
-        <div class="footer-right">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/creator">Creator</a>
-            <a href="/asl">ASL</a>
-            <a href="/isl">ISL</a>
-        </div>
-
     </div>
 
-    <div class="footer-bottom">
-        © 2026 VYAKT. All rights reserved.
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/" class="logo-link">
+                    <img src="{{ url_for('static', filename='logo-main.png') }}" class="nav-logo">
+                    <span class="nav-title">VYAKT</span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/creator">Creator</a>
+                <a href="/isl">ISL</a>
+                <a href="/asl">ASL</a>
+                <a href="/#faq">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <h2>VYAKT</h2>
+                <p>Making communication accessible through technology.</p>
+            </div>
+            <div class="footer-right">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/creator">Creator</a>
+                <a href="/asl">ASL</a>
+                <a href="/isl">ISL</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 VYAKT. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Background starfield script (Subtle, fine pin-point stars matching reference image 5 for 100% text readability) -->
+    <script>
+        const canvas = document.getElementById("starfield");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = [];
+        let numStars = 300;
+        let speed = 0.12;
+
+        for (let i = 0; i < numStars; i++) {
+            let angle = Math.random() * Math.PI * 2;
+            let distance = Math.random() * 2;
+            stars.push({
+                x: Math.cos(angle) * distance,
+                y: Math.sin(angle) * distance,
+                z: Math.random() * canvas.width
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(5, 17, 36, 0.4)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            let cx = canvas.width / 2;
+            let cy = canvas.height / 2;
+
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                s.z -= speed;
+                if (s.z <= 0) {
+                    s.z = canvas.width;
+                    let angle = Math.random() * Math.PI * 2;
+                    let distance = Math.random() * 2;
+                    s.x = Math.cos(angle) * distance;
+                    s.y = Math.sin(angle) * distance;
+                }
+
+                let k = 128.0 / s.z;
+                let px = s.x * k * canvas.width + cx;
+                let py = s.y * k * canvas.height + cy;
+
+                if (px >= 0 && px <= canvas.width && py >= 0 && py <= canvas.height) {
+                    let alpha = Math.max(0.1, (1.0 - s.z / canvas.width) * 0.45);
+                    ctx.fillStyle = "rgba(255, 255, 255, " + alpha.toFixed(2) + ")";
+                    ctx.beginPath();
+                    ctx.arc(px, py, 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll(".faq-item").forEach(item => {
+            item.addEventListener("click", () => {
+                item.classList.toggle("active");
+            });
+        });
+    </script>
+
+    <div id="ashi-trigger"
+        style="position:fixed;bottom:0;right:18px;width:130px;height:180px;cursor:pointer;z-index:1000000;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;transition:transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <!-- Arched Orbit Text surrounding Ashi's head (Reduced gap sitting tightly over hair) -->
+        <div class="orbit-text"
+            style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:200px;height:130px;opacity:1;pointer-events:none;z-index:9992;">
+            <svg viewBox="0 0 300 300" style="width:100%;height:100%;">
+                <defs>
+                    <path id="chatPath" d="M 55,150 a 95,95 0 1,1 190,0" fill="none" />
+                </defs>
+                <text class="orbit-word"
+                    style="fill:#4fc3f7;font-size:16px;letter-spacing:3.5px;font-weight:800;text-shadow:0 0 8px rgba(79,195,247,0.9),0 0 18px rgba(79,195,247,0.6);">
+                    <textPath href="#chatPath" startOffset="50%" text-anchor="middle">CLICK TO CHAT</textPath>
+                </text>
+            </svg>
+        </div>
+        <div class="ashi-trigger-animation-wrapper"
+            style="width:125px;height:180px;display:flex;align-items:center;justify-content:center">
+            <img id="ashi-trigger-img" src="/static/ashi_nobg.png" alt="Ashi AI" class="ashi-trigger-img"
+                style="width:125px;height:180px;object-fit:contain;transition:filter .3s ease;filter:drop-shadow(0 0 18px rgba(79, 195, 247, 0.8));">
+        </div>
     </div>
 
-</footer>
-
-<script>
-
-const canvas = document.getElementById("starfield");
-
-const ctx = canvas.getContext("2d");
-
-
-canvas.width = window.innerWidth;
-
-canvas.height = window.innerHeight;
-
-
-let stars = [];
-
-let numStars = 520;
-
-let speed = 0.5;
-
-
-for(let i=0;i<numStars;i++){
-
-let angle = Math.random()*Math.PI*2;
-
-let distance = Math.random()*2;
-
-
-stars.push({
-
-x:Math.cos(angle)*distance,
-y:Math.sin(angle)*distance,
-z:Math.random()*canvas.width
-
-});
-
-}
-
-
-
-function animate(){
-
-
-let gradient = ctx.createRadialGradient(
-
-canvas.width/2,
-canvas.height/2,
-0,
-
-canvas.width/2,
-canvas.height/2,
-canvas.width
-
-);
-
-
-gradient.addColorStop(0,"#0b1d3a");
-
-gradient.addColorStop(0.7,"#05070f");
-
-gradient.addColorStop(1,"#000000");
-
-
-ctx.fillStyle=gradient;
-
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-
-
-for(let i=0;i<numStars;i++){
-
-
-let star=stars[i];
-
-
-star.z-=speed;
-
-
-if(star.z<=1){
-
-let angle=Math.random()*Math.PI*2;
-
-star.x=Math.cos(angle);
-
-star.y=Math.sin(angle);
-
-star.z=canvas.width;
-
-}
-
-
-let k=128/star.z;
-
-
-let px=canvas.width/2+star.x*k*canvas.width;
-
-let py=canvas.height/2+star.y*k*canvas.width;
-
-
-let size=(1-star.z/canvas.width)*1.8;
-
-
-let opacity = 0.3 + Math.random()*0.7;
-
-ctx.fillStyle = "rgba(255,255,255,"+opacity+")";
-
-ctx.fillRect(px,py,size,size);
-
-
-
-}
-
-
-requestAnimationFrame(animate);
-
-}
-
-
-animate();
-
-</script>
-
-<script>
-let lastScroll = 0;
-
-const nav = document.querySelector("nav");
-
-
-window.addEventListener("scroll", () => {
-
-let currentScroll = window.pageYOffset;
-
-
-if(currentScroll > lastScroll){
-
-nav.style.transform = "translateY(-100%)";
-
-}
-else{
-
-nav.style.transform = "translateY(0)";
-
-}
-
-
-lastScroll = currentScroll;
-
-});
-
-
-</script>
-<script>
-
-document.querySelectorAll(".faq-item").forEach(item=>{
-
-item.addEventListener("click",()=>{
-
-item.classList.toggle("active")
-
-})
-
-})
-
-</script>
-
+    <div id="ashi-overlay"
+        style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(7px);z-index:10000">
+    </div>
+
+    <div id="ashi-panel"
+        style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);width:min(880px,97vw);height:min(600px,93vh);border-radius:24px;overflow:hidden;z-index:10001;flex-direction:row;background:linear-gradient(140deg,#060f22 0%,#071828 60%,#060f22 100%);border:1px solid rgba(79,195,247,.18);box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 80px rgba(79,195,247,.06);opacity:0;transition:opacity .3s,transform .3s">
+        <!-- LEFT: Ashi standing (no background, aligned to bottom) -->
+        <div id="ashi-left"
+            style="width:310px;min-width:310px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:0;overflow:hidden;background:none;border-right:1px solid rgba(255,255,255,0.06)">
+            <div
+                style="position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:5;text-align:center;width:100%;">
+                <div
+                    style="font-size:26px;font-weight:900;letter-spacing:6px;color:#fff;text-shadow:0 0 15px rgba(79,195,247,0.85);">
+                    ASHI</div>
+                <div
+                    style="font-size:10px;letter-spacing:2px;color:#4fc3f7;margin-top:4px;text-transform:uppercase;opacity:0.8;">
+                    Conversational Assistant</div>
+            </div>
+            <div class="ashi-left-glow"
+                style="position:absolute;bottom:0;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(79,195,247,.12) 0%,transparent 70%);filter:blur(25px)">
+            </div>
+            <img id="ashi-panel-img" src="/static/ashi_nobg.png" alt="Ashi" class="ashi-panel-img"
+                style="width:290px;height:410px;object-fit:contain;position:relative;z-index:2;margin-bottom:0;display:block">
+        </div>
+        <!-- RIGHT: Chat -->
+        <div id="ashi-right"
+            style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(3,6,18,.5)">
+            <div id="ashi-header"
+                style="display:flex;align-items:center;gap:10px;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0">
+                <img src="/static/logo-main.png" class="ashi-logo" alt="logo"
+                    style="width:30px;height:30px;border-radius:50%;object-fit:contain;border:1.5px solid #4fc3f7">
+                <div class="ashi-header-info" style="flex:1">
+                    <div class="ashi-header-name" style="color:#fff;font-weight:700;font-size:14px">Ashi <span
+                            style="opacity:.5;font-weight:400;font-size:12px">&#x2022; VYAKT AI</span></div>
+                    <div class="ashi-header-sub" style="color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px">
+                        Always here for you</div>
+                </div>
+                <button class="ashi-close" onclick="closeAshi()"
+                    style="background:none;border:none;color:rgba(255,255,255,.7);font-size:26px;cursor:pointer;line-height:1;padding:0 4px;transition:color .2s;flex-shrink:0">&#x00D7;</button>
+            </div>
+            <div id="ashi-msgs"
+                style="flex:1;overflow-y:auto;padding:13px 14px;display:flex;flex-direction:column;gap:10px;min-height:0">
+            </div>
+            <div id="ashi-chips-row" style="padding:0 14px 10px;display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0">
+            </div>
+            <div id="ashi-footer"
+                style="display:flex;align-items:center;gap:8px;padding:11px 13px;border-top:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.2);flex-shrink:0">
+                <input type="text" id="ashi-input" placeholder="Ask me anything..."
+                    onkeydown="if(event.key==='Enter')ashiSubmit()"
+                    style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:9px 16px;color:#fff;font-size:14px;outline:none;transition:border-color .2s">
+                <button class="ashi-send" onclick="ashiSubmit()"
+                    style="width:38px;height:38px;border-radius:50%;background:#4fc3f7;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#060f22;transition:background .2s,transform .15s;flex-shrink:0">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* ===== TRIGGER HOVER ENHANCED EFFECT (SYNCED CONTAINER MOVEMENT) ===== */
+        #ashi-trigger:hover {
+            transform: translateY(-8px) scale(1.08);
+        }
+
+        #ashi-trigger:hover .ashi-trigger-img {
+            filter: drop-shadow(0 0 32px rgba(79, 195, 247, 1)) brightness(1.1);
+        }
+
+        /* ===== BUBBLES ===== */
+        .msg-bot {
+            align-self: flex-start;
+            max-width: 86%;
+            background: rgba(255, 255, 255, .09);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 14px 14px 14px 3px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            max-width: 86%;
+            background: #4fc3f7;
+            color: #060f22;
+            padding: 10px 14px;
+            border-radius: 14px 14px 3px 14px;
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .msg-typing {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, .05);
+            color: rgba(255, 255, 255, .5);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .msg-error {
+            align-self: flex-start;
+            background: rgba(244, 67, 54, .1);
+            color: #f44336;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        /* ===== LANG PICKER & CHIPS ===== */
+        .lang-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 10px;
+        }
+
+        .lang-btn {
+            padding: 6px 13px;
+            border-radius: 18px;
+            background: rgba(79, 195, 247, .1);
+            border: 1px solid rgba(79, 195, 247, .35);
+            color: #4fc3f7;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, transform .15s;
+        }
+
+        .lang-btn:hover:not(:disabled) {
+            background: rgba(79, 195, 247, .25);
+            transform: scale(1.04);
+        }
+
+        .lang-btn.sel {
+            background: #4fc3f7;
+            color: #060f22;
+            border-color: #4fc3f7;
+        }
+
+        .lang-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .ashi-chip {
+            padding: 6px 13px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .12);
+            color: #9fb7c8;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .ashi-chip:hover {
+            background: rgba(79, 195, 247, .1);
+            border-color: rgba(79, 195, 247, .3);
+            color: #4fc3f7;
+        }
+    </style>
+
+    <script>
+        /* ============ GLOBAL VIDEO MODAL FUNCTIONS ============ */
+        function openVideoModal() {
+            console.log("Global openVideoModal called");
+            const m = document.getElementById("videoModal");
+            if (m) {
+                m.style.display = "flex";
+                setTimeout(() => { m.style.opacity = "1"; }, 10);
+            }
+        }
+        function closeVideoModal() {
+            console.log("Global closeVideoModal called");
+            const m = document.getElementById("videoModal");
+            const v = document.getElementById("translationVideo");
+            if (m) {
+                m.style.opacity = "0";
+                if (v) v.pause();
+                setTimeout(() => { m.style.display = "none"; }, 300);
+            }
+        }
+        window.openVideoModal = openVideoModal;
+        window.closeVideoModal = closeVideoModal;
+
+        /* ============ ASHI CHATBOT ============ */
+        let ashiOpen = false, ashiReady = false;
+        let ashiStep = 'lang'; // lang -> name -> age -> country -> done
+        let ashiProfile = { lang: '', name: '', age: '', country: '' };
+
+        const LANG_MAP = {
+            en: { l: 'English', t: 'Typing...', e: 'Could not connect.' },
+            hi: { l: 'Hindi', t: 'लिख रही हूँ...', e: 'कनेक्शन त्रुटि।' },
+            es: { l: 'Espanol', t: 'Escribiendo...', e: 'Error de conexion.' },
+            fr: { l: 'Francais', t: 'Ecriture...', e: 'Erreur de connexion.' },
+            de: { l: 'Deutsch', t: 'Schreibt...', e: 'Verbindungsfehler.' },
+            it: { l: 'Italiano', t: 'Scrive...', e: 'Errore di connessione.' }
+        };
+
+        function openAshi() {
+            console.log("openAshi trigger registered!");
+            ashiOpen = true;
+            document.getElementById('ashi-overlay').style.display = 'block';
+            const p = document.getElementById('ashi-panel');
+            p.style.display = 'flex';
+            document.getElementById('ashi-trigger').style.display = 'none';
+            setTimeout(() => {
+                p.style.opacity = '1';
+                p.style.transform = 'translate(-50%,-50%) scale(1)';
+            }, 12);
+            if (!ashiReady) {
+                ashiReady = true;
+                ashiStart();
+            }
+        }
+
+        function closeAshi() {
+            console.log("closeAshi trigger registered!");
+            ashiOpen = false;
+            const p = document.getElementById('ashi-panel');
+            p.style.opacity = '0';
+            p.style.transform = 'translate(-50%,-50%) scale(.9)';
+            setTimeout(() => {
+                p.style.display = 'none';
+                document.getElementById('ashi-overlay').style.display = 'none';
+                document.getElementById('ashi-trigger').style.display = 'flex';
+            }, 300);
+        }
+
+        // Global Document Listener to Guarantee Chatbot Opening
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('#ashi-trigger')) {
+                console.log("Global catch of click on trigger");
+                openAshi();
+            }
+            if (e.target.closest('#ashi-overlay')) {
+                closeAshi();
+            }
+        });
+
+        /* helpers */
+        function addMsg(cls, html) {
+            const el = document.createElement('div');
+            el.className = 'msg-' + cls;
+            el.innerHTML = html;
+            const msgs = document.getElementById('ashi-msgs');
+            msgs.appendChild(el);
+            msgs.scrollTop = msgs.scrollHeight;
+            return el;
+        }
+        function md2(t) { return t.replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\'/g, '<strong>$1</strong>'); }
+        function esc2(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function clearChips() { document.getElementById('ashi-chips-row').innerHTML = ''; }
+        function showChips(arr) {
+            clearChips();
+            const row = document.getElementById('ashi-chips-row');
+            arr.forEach(s => {
+                const b = document.createElement('button');
+                b.className = 'ashi-chip';
+                b.textContent = s;
+                b.onclick = () => {
+                    clearChips();
+                    document.getElementById('ashi-input').value = s;
+                    ashiSubmit();
+                };
+                row.appendChild(b);
+            });
+        }
+
+        /* name validation */
+        function isValidName(name) {
+            name = name.trim();
+            const re = /^[a-zA-Z\s]{2,50}$/;
+            return re.test(name);
+        }
+
+        /* start onboarding */
+        function ashiStart() {
+            ashiStep = 'lang';
+            addMsg('bot', md2("Hello! I am Ashi, VYAKT's AI assistant. First, choose your preferred language:"));
+            showLangPicker();
+        }
+
+        function showLangPicker() {
+            const g = document.createElement('div');
+            g.className = 'lang-grid';
+            Object.entries(LANG_MAP).forEach(([code, info]) => {
+                const b = document.createElement('button');
+                b.className = 'lang-btn';
+                b.innerHTML = info.l;
+                b.onclick = () => {
+                    g.querySelectorAll('.lang-btn').forEach(x => {
+                        x.disabled = true;
+                        x.style.opacity = '.45';
+                    });
+                    b.classList.add('sel');
+                    b.style.opacity = '1';
+                    pickLang(code);
+                };
+                g.appendChild(b);
+            });
+            const w = document.createElement('div');
+            w.className = 'msg-bot';
+            w.appendChild(g);
+            document.getElementById('ashi-msgs').appendChild(w);
+            document.getElementById('ashi-msgs').scrollTop = 99999;
+        }
+
+        function pickLang(code) {
+            ashiProfile.lang = code;
+            ashiStep = 'name';
+            setTimeout(() => {
+                const g = (code === 'hi') ? "बढ़िया! आपका नाम क्या है?" :
+                    (code === 'es') ? "Genial! ¿Como te llamas?" :
+                        (code === 'fr') ? "Super ! Quel est votre prenom ?" :
+                            (code === 'de') ? "Toll! Wie ist Ihr Name?" :
+                                (code === 'it') ? "Ottimo! Come ti chiami?" :
+                                    "Great! What is your name?";
+                addMsg('bot', md2(g));
+                document.getElementById('ashi-input').placeholder = 'Your name...';
+            }, 500);
+        }
+
+        async function ashiSubmit() {
+            const inp = document.getElementById('ashi-input');
+            const text = inp.value.trim();
+            if (!text) return;
+            addMsg('user', esc2(text));
+            inp.value = '';
+            clearChips();
+
+            if (ashiStep !== 'done') {
+                ashiOnboard(text);
+                return;
+            }
+
+            const lang = ashiProfile.lang;
+            const typEl = addMsg('typing', LANG_MAP[lang]?.t || 'Typing...');
+
+            try {
+                const resp = await fetch('/chatbot_respond', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, lang: lang, profile: ashiProfile })
+                });
+                const data = await resp.json();
+                typEl.remove();
+                const reply = data.reply || 'I could not process that.';
+                addMsg('bot', md2(reply));
+                showFollowUps(text, reply);
+            } catch (e) {
+                typEl.remove();
+                addMsg('error', LANG_MAP[lang]?.e || 'Connection error.');
+            }
+        }
+
+        function ashiOnboard(text) {
+            const lang = ashiProfile.lang;
+            const inp = document.getElementById('ashi-input');
+            if (ashiStep === 'name') {
+                if (!isValidName(text)) {
+                    addMsg('bot', md2("Please enter a valid name (letters only, at least 2 characters):"));
+                    inp.placeholder = 'Enter name again...';
+                    return;
+                }
+                ashiProfile.name = text;
+                ashiStep = 'age';
+                setTimeout(() => {
+                    const q = (lang === 'hi') ? `अच्छा, **${text}**! आपकी उम्र क्या है?` :
+                        (lang === 'es') ? `Encantada, **${text}**! ¿Cuantos anos tienes?` :
+                            (lang === 'fr') ? `Ravi de vous rencontrer, **${text}** ! Quel est votre age ?` :
+                                (lang === 'de') ? `Schon, **${text}**! Wie alt sind Sie?` :
+                                    (lang === 'it') ? `Piacere, **${text}**! Quanti anni hai?` :
+                                        `Nice to meet you, **${text}**! How old are you?`;
+                    addMsg('bot', md2(q));
+                    inp.placeholder = 'Your age...';
+                    document.getElementById('ashi-msgs').scrollTop = 99999;
+                }, 500);
+            } else if (ashiStep === 'age') {
+                ashiProfile.age = text;
+                ashiStep = 'country';
+                setTimeout(() => {
+                    const q = (lang === 'hi') ? "आप किस देश से हैं?" :
+                        (lang === 'es') ? "¿De que pais eres?" :
+                            (lang === 'fr') ? "De quel pays venez-vous ?" :
+                                (lang === 'de') ? "Aus welchem Land kommen Sie?" :
+                                    (lang === 'it') ? "Da quale paese vieni?" :
+                                        "Which country are you from?";
+                    addMsg('bot', md2(q));
+                    inp.placeholder = 'Your country...';
+                    document.getElementById('ashi-msgs').scrollTop = 99999;
+                }, 500);
+            } else if (ashiStep === 'country') {
+                ashiProfile.country = text;
+                ashiStep = 'done';
+                setTimeout(() => {
+                    const n = ashiProfile.name, a = ashiProfile.age, c = ashiProfile.country;
+                    const langLabel = LANG_MAP[lang]?.l || lang.toUpperCase();
+
+                    const s = (lang === 'hi') ? `शुक्रिया, **${n}**!
+
+• **नाम:** ${n}
+• **उम्र:** ${a}
+• **देश:** ${c}
+• **भाषा:** ${langLabel}
+
+आज मैं आपकी कैसे मदद कर सकती हूँ?` :
+                        (lang === 'es') ? `Gracias, **${n}**!
+
+• **Nombre:** ${n}
+• **Edad:** ${a}
+• **Pais:** ${c}
+• **Idioma:** ${langLabel}
+
+¿En que posso ayudarte hoy?` :
+                            `Thank you, **${n}**!
+
+• **Name:** ${n}
+• **Age:** ${a}
+• **Country:** ${c}
+• **Language:** ${langLabel}
+
+How can I help you today? Here are some suggested questions:`;
+                    addMsg('bot', md2(s));
+
+                    const chips = (lang === 'hi') ? ['साइट का उपयोग कैसे करें?', 'ASL क्या है?', 'ISL क्या है?', 'गति कैसे बदलें?', 'व्यक्त किसने बनाया?'] :
+                        (lang === 'es') ? ['¿Cómo usar el sitio?', 'Qué es ASL', 'Qué es ISL', 'Ajustar velocidad', '¿Quién creó VYAKT?'] :
+                            ['How do I use the translator?', 'Tell me about ASL', 'Tell me about ISL', 'Adjust playback speed', 'Who made VYAKT?', 'What is sign language?'];
+                    setTimeout(() => showChips(chips), 300);
+                    inp.placeholder = 'Ask me anything...';
+                    document.getElementById('ashi-msgs').scrollTop = 99999;
+                }, 600);
+            }
+        }
+
+        /* ---- follow-up suggestions ---- */
+        function showFollowUps(userMsg, botReply) {
+            const lower = (userMsg + botReply).toLowerCase();
+            let chips = [];
+            if (lower.includes('asl')) {
+                chips = ['Tell me about ISL', 'Translate text to ASL', 'How do I use ASL translator?'];
+            } else if (lower.includes('isl')) {
+                chips = ['Tell me about ASL', 'Translate text to ISL', 'How do I use ISL translator?'];
+            } else if (lower.includes('speed') || lower.includes('slow')) {
+                chips = ['Tell me about ASL', 'Tell me about ISL', 'Who made VYAKT?'];
+            } else if (lower.includes('creator') || lower.includes('pratyaksha')) {
+                chips = ['Tell me about ASL', 'Tell me about ISL', 'How do I use the translator?'];
+            } else {
+                chips = ['Tell me about ASL', 'Tell me about ISL', 'Adjust playback speed'];
+            }
+            setTimeout(() => showChips(chips), 400);
+        }
+
+        window.openAshi = openAshi;
+        window.closeAshi = closeAshi;
+    </script>
 
 </body>
 
 </html>
-

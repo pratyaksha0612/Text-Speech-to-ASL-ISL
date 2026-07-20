@@ -1,204 +1,64 @@
-# Vyakta - Text and Speech to Sign Language Translator
+# VYAKT: Sign Language Translation Ecosystem
 
-**Vyakta (व्यक्त)** is a Sanskrit word meaning **"expressed"** or **"made visible."**  
-This project embodies that meaning by converting **text and speech into visual sign language**, enabling communication accessibility through expression.
+VYAKT is an intelligent, visual communication platform designed to bridge the gap between spoken/written language and sign systems. By translating text and real-time speech into sign language sequences, VYAKT makes digital communication accessible, inclusive, and natural.
 
-Vyakta is a web-based application that translates **Text and Speech into Indian Sign Language (ISL) and American Sign Language (ASL)** using real sign language video playback.
+The platform supports American Sign Language (ASL) and Indian Sign Language (ISL).
 
-It is designed to support accessibility, assist learning, and bridge communication gaps between the hearing and the deaf community.
+# Key Features
 
+* Dual Sign Portals: Dedicated portals for American Sign Language (ASL) and Indian Sign Language (ISL).
+* Text to Sign Translation: Convert typed text into seamless sign language video sequences.
+* Speech to Sign Translation: Utilize real-time voice-to-text recognition to render spoken words into sign language.
+* Speed Control: Customize video playback speeds from 0.25x up to 2.00x for individualized learning and natural pacing.
+* Interactive A to Z Reference: Hover-to-preview and click-to-replay reference video grids for both ASL and ISL letters.
+* Centered Video Playback: Clean, screen-centered modal popups for clear video viewing.
+* Ashi Conversational Assistant: A multilingual AI assistant styled as a floating avatar with interactive orbit text and contextual guidance.
+* Portal Navigation: Integrated back-navigation buttons allowing quick switching between text/speech options and portal choices.
 
+# Architecture & Technology Stack
 
-# Demo
+* Backend Framework: Python, Flask
+* Frontend: HTML5, CSS3, JavaScript (ES6)
+* Visual Effects: Dynamic 3D Starfield Canvas and Responsive Glassmorphism Styling
+* Speech Recognition Engine: Web Speech API for real-time browser audio processing
 
-A demonstration of the project is available in:
+# Installation and Setup
 
+### Prerequisites
 
+Ensure Python 3.8 or higher is installed. Install required Python packages:
 
-# Features
+```bash
+pip install flask gunicorn
+```
 
-• Supports both **Indian Sign Language (ISL)** and **American Sign Language (ASL)**
+### Running the Application
 
-• Accepts:
-
-- Text input  
-- Speech input  
-
-• Converts speech to text using speech recognition
-
-• Displays **real sign language videos**
-
-• Smooth continuous playback in a single window
-
-• Handles:
-
-- Words  
-- Sentences  
-- Spaces  
-
-• Modern, dynamic web interface
-
-
-
-# How It Works
-
-1. User opens the Vyakta web application
-
-2. Selects preferred sign language:
-
-   - ISL  
-   - ASL  
-
-3. Provides input:
-
-   - Text  
-   OR  
-   - Speech  
-
-4. If speech is provided, system converts speech → text
-
-5. Text is split into characters
-
-6. Corresponding sign language videos are played sequentially
-
-
+1. Start the Flask server:
+   ```bash
+   python app.py
+   ```
+2. Open your web browser and navigate to:
+   ```text
+   http://127.0.0.1:5000
+   ```
 
 # Project Structure
 
-Vyakta/
-│
-├── app.py
-│
-├── speechtoasl.py
-├── speechtoisl.py
-│
-├── texttoasl.py
-├── texttoisl.py
-│
-├── dataset/
-│ ├── asl/
-│ └── isl/
-│
-├── static/
-│ ├── style.css
-│ ├── logo-main.png
-│ ├── logo-nav.png
-│ ├── logo-hero.png
-│ ├── blank.mp4
-│
-├── templates/
-│ ├── base.html
-│ ├── index.html
-│ ├── about.html
-│ ├── asl.html
-│ ├── isl.html
-│ ├── asl_text.html
-│ ├── asl_speech.html
-│ ├── isl_text.html
-│ ├── isl_speech.html
-│
-└── DEMO.mp4
-
-
-
-# Installation
-
-## Step 1 — Clone Repository
-
-git clone https://github.com/pratyaksha0612/Text-Speech-to-ASL-ISL.git
-
-cd Text-Speech-to-ASL-ISL
-
-
-
-
-## Step 2 — Install Dependencies
-
-pip install flask
-pip install opencv-python
-pip install sounddevice
-pip install scipy
-pip install SpeechRecognition
-
-
-
-
-# Running the Application
-
-python app.py
-
-
-Open browser and go to:
-
-http://127.0.0.1:5000/
-
-
-
-
-# Technologies Used
-
-Python  
-Flask  
-OpenCV  
-SpeechRecognition  
-HTML  
-CSS  
-JavaScript  
-
-
-
-# Purpose
-
-Vyakta aims to:
-
-• Make communication accessible
-
-• Enable sign language learning
-
-• Assist deaf-mute communication
-
-• Convert speech into visual expression
-
-
-
-# Meaning of Name
-
-**Vyakta (व्यक्त)**
-
-Meaning:
-
-Expressed  
-Manifested  
-Made visible  
-
-This reflects the core goal of the project:
-
-Converting speech and text into visible communication.
-
-
-
-# Future Improvements
-
-• Word-level translation
-
-• Sentence-level translation
-
-• Real-time sign recognition
-
-• Deep learning integration
-
-• Mobile application version
-
-
+* `app.py`: Core Flask application routes and API endpoints.
+* `texttoasl.py`: ASL text translation engine.
+* `texttoisl.py`: ISL text translation engine.
+* `speechtoasl.py`: ASL speech translation engine interface.
+* `speechtoisl.py`: ISL speech translation engine interface.
+* `templates/`: HTML templates for portals, translation pages, and Ashi assistant.
+* `static/`: Styling, JavaScript, brand logos, avatar graphics, and base videos.
+* `dataset/`: Comprehensive video datasets for ASL and ISL sign letters.
 
 # Author
 
-Pratyaksha Singh  
-B.Tech CSE — AI & ML  
-VIT Bhopal University
-
-
+* Pratyaksha Singh
+* VIT Bhopal University
 
 # License
 
-MIT License
+This project is licensed under the MIT License.
