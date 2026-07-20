@@ -125,7 +125,7 @@ text-align:center;
         radial-gradient(1px 1px at 60% 20%, white, transparent),
         radial-gradient(1px 1px at 80% 50%, white, transparent);
 
-    animation: slowDrift 200s linear infinite;
+    animation: slowDrift 80s linear infinite;
 
     opacity: 0.6;
 
