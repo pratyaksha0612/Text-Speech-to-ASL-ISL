@@ -195,78 +195,11 @@ text-align:center;
     opacity: 0.6;
 }
 
-/* ================= WARP STAR LAYER 1 ================= */
+/* ================= WARP STAR LAYERS (STREAKS REMOVED) ================= */
 
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    top: 0;
-    left: 50%;
-
-    width: 2px;
-    height: 2px;
-
-    background: white;
-
-    box-shadow:
-
-        0 -100px white,
-        50px -200px white,
-        -80px -300px white,
-        120px -400px white,
-        -150px -500px white,
-        200px -600px white,
-        -220px -700px white,
-        260px -800px white,
-        -300px -900px white,
-        350px -1000px white,
-        -400px -1100px white;
-
-    animation: warp1 3s linear infinite;
-
-    z-index: -50;
-
+body::before, body::after {
+    display: none !important;
 }
-
-
-
-/* ================= WARP STAR LAYER 2 ================= */
-
-body::after {
-
-    content: "";
-
-    position: fixed;
-
-    top: 0;
-    left: 50%;
-
-    width: 3px;
-    height: 3px;
-
-    background: white;
-
-    box-shadow:
-
-        -60px -150px white,
-        100px -300px white,
-        -140px -450px white,
-        180px -600px white,
-        -220px -750px white,
-        260px -900px white,
-        -300px -1050px white,
-        340px -1200px white;
-
-    animation: warp2 4.5s linear infinite;
-
-    z-index: -49;
-
-}
-
-
 
 /* ================= ANIMATIONS ================= */
 

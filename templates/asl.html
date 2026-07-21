@@ -20,8 +20,10 @@
 
 <!-- RIGHT SIDE -->
 <div class="isl-right">
-    <video id="aslVideo" class="isl-video" autoplay muted playsinline></video>
-    <div class="alphabet-bar" id="aslAlphabetBar"></div>
+    <div class="top-video-player-frame" style="position:relative;width:380px;height:380px;margin:0 auto;border-radius:22px;padding:3px;background:linear-gradient(135deg, rgba(79,195,247,0.6), rgba(6,18,38,0.8), rgba(79,195,247,0.3));box-shadow:0 0 35px rgba(79,195,247,0.3), inset 0 0 20px rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.45);backdrop-filter:blur(12px);transition:all .35s ease;">
+        <video id="aslVideo" class="isl-video" autoplay muted playsinline style="width:100%;height:100%;border-radius:18px;object-fit:cover;display:block;background:linear-gradient(145deg, #07162b 0%, #030814 100%);"></video>
+    </div>
+    <div class="alphabet-bar" id="aslAlphabetBar" style="margin-top:24px;"></div>
 </div>
 
 </div>
@@ -58,18 +60,34 @@
 <div style="margin-top:40px;padding:36px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;backdrop-filter:blur(10px);">
     <h3 style="color:#4fc3f7;text-align:center;margin:0 0 8px;font-size:22px;font-weight:700;">A – Z Sign Reference</h3>
     <p style="text-align:center;opacity:.7;font-size:14px;margin:0 0 28px;">Hover a card to preview &bull; Click to replay from start</p>
-    <div id="asl-sign-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:12px;"></div>
+    <div id="asl-sign-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:14px;"></div>
 </div>
 
 </section>
 
 <script>
-// A-Z Reference Grid setup
+// A-Z Reference Grid setup with custom letter card placeholders (No black boxes)
 (function(){
     const grid = document.getElementById('asl-sign-grid');
     'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(l){
+        const upper = l.toUpperCase();
         const card = document.createElement('div');
-        card.style.cssText = 'background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;text-align:center;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;';
+        card.style.cssText = 'position:relative;background:linear-gradient(145deg, #0c203b 0%, #061122 100%);border:1px solid rgba(79,195,247,.25);border-radius:14px;overflow:hidden;text-align:center;cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;aspect-ratio:1/1.2;';
+
+        // Placeholder container (shown before/behind video)
+        const ph = document.createElement('div');
+        ph.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at center, rgba(14,38,70,0.95) 0%, rgba(5,12,24,0.98) 100%);z-index:1;pointer-events:none;transition:opacity .3s ease;';
+
+        const wm = document.createElement('div');
+        wm.textContent = upper;
+        wm.style.cssText = "font-size:32px;font-weight:900;color:#4fc3f7;text-shadow:0 0 16px rgba(79,195,247,0.6);font-family:'Outfit',sans-serif;letter-spacing:1px;";
+
+        const icon = document.createElement('div');
+        icon.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="#4fc3f7"><path d="M8 5v14l11-7z"/></svg>';
+        icon.style.cssText = 'width:22px;height:22px;border-radius:50%;background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);display:flex;align-items:center;justify-content:center;margin-top:4px;';
+
+        ph.appendChild(wm);
+        ph.appendChild(icon);
 
         const vid = document.createElement('video');
         vid.src = '/asl_dataset/' + l + '.mp4';
@@ -77,31 +95,38 @@
         vid.loop = true;
         vid.playsInline = true;
         vid.preload = 'metadata';
-        vid.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#000;';
+        vid.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;display:block;background:transparent;opacity:0;transition:opacity .3s ease;position:relative;z-index:2;';
 
         const lbl = document.createElement('div');
-        lbl.textContent = l.toUpperCase();
-        lbl.style.cssText = 'color:#4fc3f7;font-weight:800;font-size:17px;padding:5px 0 6px;background:rgba(0,0,0,.35);letter-spacing:1px;';
+        lbl.textContent = upper;
+        lbl.style.cssText = 'color:#4fc3f7;font-weight:800;font-size:15px;padding:4px 0 5px;background:rgba(3,10,22,.85);border-top:1px solid rgba(79,195,247,0.2);letter-spacing:1px;position:relative;z-index:3;';
 
+        card.appendChild(ph);
         card.appendChild(vid);
         card.appendChild(lbl);
 
         vid.addEventListener('loadedmetadata', function(){
-            vid.currentTime = Math.max(0, vid.duration - 0.05);
+            if (vid.duration) vid.currentTime = Math.max(0, vid.duration - 0.05);
+            vid.style.opacity = '1'; // Reveal crisp frame once ready
         });
+
         card.addEventListener('mouseenter', function(){
+            vid.style.opacity = '1';
             vid.play();
-            card.style.transform = 'translateY(-5px) scale(1.05)';
-            card.style.borderColor = 'rgba(79,195,247,.6)';
-            card.style.boxShadow = '0 8px 24px rgba(79,195,247,.25)';
+            card.style.transform = 'translateY(-5px) scale(1.04)';
+            card.style.borderColor = 'rgba(79,195,247,.85)';
+            card.style.boxShadow = '0 8px 24px rgba(79,195,247,.3)';
         });
+
         card.addEventListener('mouseleave', function(){
             vid.pause();
             card.style.transform = '';
-            card.style.borderColor = 'rgba(255,255,255,.08)';
+            card.style.borderColor = 'rgba(79,195,247,.25)';
             card.style.boxShadow = '';
         });
+
         card.addEventListener('click', function(){
+            vid.style.opacity = '1';
             vid.currentTime = 0;
             vid.play();
         });
