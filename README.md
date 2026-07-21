@@ -1,4 +1,4 @@
-# 🤟 VYAKT: AI-Powered Sign Language Translation & Learning Ecosystem
+# VYAKT: AI-Powered Sign Language Translation & Learning Ecosystem
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-vyakt.onrender.com-00d2ff?style=for-the-badge&logo=render)](https://vyakt.onrender.com)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -9,41 +9,42 @@
 
 ---
 
-## 🌟 Live Demo & Deployment
+## Live Demo & Video Walkthrough
 
-🌐 **Live Web Application**: [https://vyakt.onrender.com](https://vyakt.onrender.com)
+- **Live Web Application**: [https://vyakt.onrender.com](https://vyakt.onrender.com)  
+- **Tutorial Video Walkthrough**: [Watch demo_output.mp4](demo_output.mp4)
 
 ---
 
-## ✨ Key Features & Capabilities
+## Key Features & Capabilities
 
-### 1. 🤟 Dual Sign Translation Portals (ASL & ISL)
-* **Text → Sign Engine**: Parses typed input sentences and dynamically strings together corresponding high-definition sign language video sequences.
-* **Speech → Sign Engine**: Integrates browser-native Speech Recognition APIs for 100% private, real-time local voice-to-sign translation.
+### 1. Dual Sign Translation Portals (ASL & ISL)
+* **Text -> Sign Engine**: Parses typed input sentences and dynamically strings together corresponding high-definition sign language video sequences.
+* **Speech -> Sign Engine**: Integrates browser-native Speech Recognition APIs for 100% private, real-time local voice-to-sign translation.
 * **Playback Speed Controls**: Adjust frame rates dynamically from `0.25x` (slower pacing for learning) up to `2.00x` (faster pacing for native signers).
 
-### 2. 🎓 Dedicated Learn Hub (`/learn`)
+### 2. Dedicated Learn Hub (`/learn`)
 * **Interactive Alphabet Grid**: Step-by-step studying module for all 26 letters (`A`–`Z`) across both ASL and ISL.
 * **Hand Placement Guides**: Detailed hand gesture formation instructions displayed alongside animated sign video demonstrations.
 
-### 3. 🎮 Jumbled Practice Quiz (`/quiz`)
+### 3. Jumbled Practice Quiz (`/quiz`)
 * **Randomized ASL & ISL Questions**: Tests sign recognition skills with jumbled questions.
-* **Interactive Wrong Answer Teaching**: Selecting an incorrect choice reveals a step-by-step hand placement guide for that sign, with **`🔄 Try Again`** (re-ask until correct) and **`⏩ Pass / Skip`** options.
+* **Interactive Wrong Answer Teaching**: Selecting an incorrect choice reveals a step-by-step hand placement guide for that sign, with **Try Again** (re-ask until correct) and **Pass / Skip** options.
 
-### 4. 🖼️ Expandable Reference Video Gallery
+### 4. Expandable Reference Video Gallery
 * **Fullscreen Modal Viewer**: Clicking any sign card on `/asl` or `/isl` opens an expanded gallery viewer.
-* **Carousel & Step Controls**: Features left/right navigation arrows (`‹` and `›`) and a 26-letter interactive thumbnail carousel bar.
+* **Carousel & Step Controls**: Features left/right navigation arrows (`<` and `>`) and a 26-letter interactive thumbnail carousel bar.
 
-### 5. 🤖 Ashi AI Assistant (Emotional Intelligence)
+### 5. Ashi AI Assistant (Emotional Intelligence)
 * **Multi-Lingual Companion**: Named after Pratyaksha's real-life nickname (*Ashi*), Ashi provides friendly, multi-lingual support in 6 languages (English, Hindi, Spanish, French, German, Italian).
 * **Smart Validation**: Strictly validates onboarding inputs (no gibberish or keyboard mashing) and remembers user profiles.
 
-### 6. 📱 100% Fully Responsive Layout
+### 6. 100% Fully Responsive Layout
 * Seamless user experience tailored for **Desktops, Laptops (1366px/1440px), Tablets (768px/1024px), and Mobile Devices (320px–480px)**.
 
 ---
 
-## 🛠️ Technology Stack & Architecture
+## Technology Stack & Architecture
 
 * **Backend**: Python 3.10+, Flask, Gunicorn
 * **Frontend**: HTML5, Vanilla CSS3 (Custom Glassmorphic System, Google Fonts *Outfit* & *Plus Jakarta Sans*), ES6+ JavaScript
@@ -52,7 +53,7 @@
 
 ---
 
-## 🚀 Local Installation & Setup
+## Local Installation & Setup
 
 ### Prerequisites
 - Python 3.8+ installed on your system.
@@ -79,7 +80,7 @@
 
 ---
 
-## 👤 Creator & Author
+## Creator & Author
 
 **Pratyaksha Singh** (Nickname: *Ashi*)  
 *Computer Science Student & Accessibility Tech Enthusiast*  
@@ -89,6 +90,6 @@
 
 ---
 
-## 📄 License
+## License
 
 This project is open-source and licensed under the **MIT License**.
