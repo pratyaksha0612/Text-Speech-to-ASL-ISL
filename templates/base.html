@@ -47,6 +47,7 @@
                 <a href="/creator">Creator</a>
                 <a href="/isl">ISL</a>
                 <a href="/asl">ASL</a>
+                <a href="#" onclick="openSignQuiz('asl'); return false;" style="color:#4fc3f7;font-weight:700;">🎮 Quiz Mode</a>
                 <a href="/#faq">FAQ</a>
             </div>
         </div>
@@ -503,7 +504,17 @@
             msgs.scrollTop = msgs.scrollHeight;
             return el;
         }
-        function md2(t) { return t.replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\'/g, '<strong>$1</strong>'); }
+        function md2(t) {
+            if (!t) return '';
+            let html = t
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#4fc3f7;font-weight:700;">$1</strong>')
+                .replace(/\*([^*]+)\*/g, '<em style="color:#e0f7fa;">$1</em>')
+                .replace(/•\s*([^\n<]+)/g, '<div style="display:flex;align-items:flex-start;gap:6px;margin:4px 0;"><span style="color:#4fc3f7;font-weight:bold;">•</span><span>$1</span></div>')
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '');
+            return html;
+        }
         function esc2(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
         function clearChips() { document.getElementById('ashi-chips-row').innerHTML = ''; }
         function showChips(arr) {
@@ -525,13 +536,18 @@
         /* Strict Onboarding Validation (No Gibberish Allowed) */
         function isValidName(name) {
             name = name.trim();
-            if (!/^[a-zA-Z\s\-']{2,35}$/.test(name)) return false;
+            if (!/^[a-zA-Z\s\-']{2,30}$/.test(name)) return false;
             const lower = name.toLowerCase();
-            const mash = ["qwerty", "asdfgh", "zxcvb", "dfghj", "ghjkl", "hjkl", "cvbnm", "wert", "yuiop", "sdfg"];
+            const mash = [
+                "qwerty", "asdfgh", "zxcvb", "dfghj", "ghjkl", "hjkl", "cvbnm", "wert", "yuiop", "sdfg",
+                "axnas", "xnask", "asdf", "zxcv", "qwer", "hjkl", "vbnm", "uiop", "erty", "dfgh", "axnask"
+            ];
             if (mash.some(p => lower.includes(p))) return false;
-            if (/(.)\1{3,}/.test(lower)) return false;
+            if (/(.)\1{2,}/.test(lower)) return false;
             const vowels = (lower.match(/[aeiouy]/g) || []).length;
             if (vowels === 0 && name.length > 2) return false;
+            const consonantClusters = lower.match(/[^aeiouy\s\-']{4,}/g);
+            if (consonantClusters) return false;
             return true;
         }
 
@@ -743,7 +759,119 @@ How can I help you today? Here are some suggested questions:`;
 
         window.openAshi = openAshi;
         window.closeAshi = closeAshi;
+
+        /* ============ SIGN LANGUAGE PRACTICE QUIZ GAME ============ */
+        let quizDataset = 'asl';
+        let quizCurrentLetter = '';
+        let quizScore = 0;
+        let quizStreak = 0;
+
+        function openSignQuiz(type = 'asl') {
+            quizDataset = type;
+            document.getElementById('signQuizModal').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('signQuizModal').classList.add('active');
+            }, 10);
+            nextQuizQuestion();
+        }
+
+        function closeSignQuiz() {
+            const modal = document.getElementById('signQuizModal');
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function nextQuizQuestion() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+            const randIdx = Math.floor(Math.random() * letters.length);
+            quizCurrentLetter = letters[randIdx];
+
+            const videoEl = document.getElementById('quizVideo');
+            videoEl.src = `/${quizDataset}_dataset/${quizCurrentLetter.toLowerCase()}.mp4`;
+            videoEl.play();
+
+            document.getElementById('quizFeedback').innerHTML = `Which ${quizDataset.toUpperCase()} letter is being signed above?`;
+            document.getElementById('quizFeedback').style.color = '#cfd8dc';
+
+            let choices = [quizCurrentLetter];
+            while (choices.length < 4) {
+                let randomChoice = letters[Math.floor(Math.random() * letters.length)];
+                if (!choices.includes(randomChoice)) choices.push(randomChoice);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('quizOptionsRow');
+            grid.innerHTML = '';
+            choices.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.textContent = letter;
+                btn.onclick = () => checkQuizAnswer(letter, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedLetter, btn) {
+            const feedbackEl = document.getElementById('quizFeedback');
+            const btns = document.querySelectorAll('.quiz-opt-btn');
+
+            if (selectedLetter === quizCurrentLetter) {
+                quizScore += 10;
+                quizStreak += 1;
+                document.getElementById('quizScore').textContent = quizScore;
+                document.getElementById('quizStreak').textContent = `${quizStreak} 🔥`;
+
+                btn.style.background = 'rgba(76, 175, 80, 0.4)';
+                btn.style.borderColor = '#4caf50';
+                btn.style.color = '#ffffff';
+                btn.style.boxShadow = '0 0 20px rgba(76, 175, 80, 0.6)';
+
+                feedbackEl.innerHTML = `<span style="color:#4caf50;font-weight:bold;">🎉 Correct! That is the letter '${quizCurrentLetter}'! (+10 pts)</span>`;
+
+                btns.forEach(b => b.disabled = true);
+                setTimeout(nextQuizQuestion, 1100);
+            } else {
+                quizStreak = 0;
+                document.getElementById('quizStreak').textContent = `0 🔥`;
+                btn.style.background = 'rgba(244, 67, 54, 0.3)';
+                btn.style.borderColor = '#f44336';
+                btn.style.color = '#ffffff';
+                feedbackEl.innerHTML = `<span style="color:#ff5252;font-weight:bold;">💡 Not quite! Give it another try.</span>`;
+            }
+        }
+        window.openSignQuiz = openSignQuiz;
+        window.closeSignQuiz = closeSignQuiz;
     </script>
+
+    <!-- 🎮 Sign Language Practice Quiz Modal -->
+    <div id="signQuizModal" class="quiz-modal-overlay" style="display:none;">
+        <div class="quiz-modal-card">
+            <div class="quiz-modal-header">
+                <div class="quiz-header-title">
+                    <span class="quiz-icon-badge">🎮</span>
+                    <div>
+                        <h3 style="margin:0;font-size:18px;color:#fff;">Sign Language Quiz Mode</h3>
+                        <span style="font-size:12px;color:#4fc3f7;">Test &amp; Master Your Sign Recognition</span>
+                    </div>
+                </div>
+                <div class="quiz-score-board">
+                    <span class="quiz-score-badge">Score: <strong id="quizScore">0</strong></span>
+                    <span class="quiz-streak-badge">Streak: <strong id="quizStreak">0 🔥</strong></span>
+                    <button class="quiz-close-btn" onclick="closeSignQuiz()">&times;</button>
+                </div>
+            </div>
+            <div class="quiz-modal-body">
+                <div class="quiz-video-frame">
+                    <video id="quizVideo" autoplay loop muted playsinline class="quiz-video"></video>
+                    <div id="quizQuestionMark" class="quiz-question-mark">?</div>
+                </div>
+                <p id="quizFeedback" class="quiz-feedback-text">Which letter (A-Z) is being signed above?</p>
+                <div id="quizOptionsRow" class="quiz-options-grid"></div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
