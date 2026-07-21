@@ -900,13 +900,18 @@ How can I help you today? Here are some suggested questions:`;
             }
         };
 
-        function openSignQuiz(type = 'asl') {
-            quizDataset = type;
+        /* ============ JUMBLED ASL/ISL QUIZ GAME WITH RE-ASK & PASS ============ */
+        let quizCurrentDataset = 'asl';
+        let quizCurrentLetter = '';
+        let quizScore = 0;
+        let quizStreak = 0;
+
+        function openSignQuiz() {
             document.getElementById('signQuizModal').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('signQuizModal').classList.add('active');
             }, 10);
-            setQuizTab('quiz');
+            nextQuizQuestion();
         }
 
         function closeSignQuiz() {
@@ -917,53 +922,33 @@ How can I help you today? Here are some suggested questions:`;
             }, 300);
         }
 
-        function setQuizTab(mode) {
-            quizMode = mode;
-            const quizBtn = document.getElementById('tabQuizBtn');
-            const studyBtn = document.getElementById('tabStudyBtn');
-            const quizArea = document.getElementById('quizPlayArea');
-            const studyArea = document.getElementById('studyPlayArea');
-
-            if (mode === 'quiz') {
-                quizBtn.classList.add('active');
-                studyBtn.classList.remove('active');
-                quizArea.style.display = 'block';
-                studyArea.style.display = 'none';
-                nextQuizQuestion();
-            } else {
-                studyBtn.classList.add('active');
-                quizBtn.classList.remove('active');
-                quizArea.style.display = 'none';
-                studyArea.style.display = 'block';
-                studyIndex = 0;
-                renderStudyCard();
-            }
-        }
-
-        function toggleGuideAccordion() {
-            const box = document.getElementById('quizGuideBox');
-            if (box.style.display === 'none' || !box.style.display) {
-                const desc = GESTURE_GUIDES[quizDataset][quizCurrentLetter] || "Observe the finger positions closely in the video.";
-                box.innerHTML = `<strong>💡 Hand Gesture Guide:</strong> ${desc}`;
-                box.style.display = 'block';
-            } else {
-                box.style.display = 'none';
-            }
-        }
-
         function nextQuizQuestion() {
+            quizCurrentDataset = Math.random() < 0.5 ? 'asl' : 'isl';
+
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
             const randIdx = Math.floor(Math.random() * letters.length);
             quizCurrentLetter = letters[randIdx];
 
             const videoEl = document.getElementById('quizVideo');
-            videoEl.src = `/${quizDataset}_dataset/${quizCurrentLetter.toLowerCase()}.mp4`;
+            videoEl.src = `/${quizCurrentDataset}_dataset/${quizCurrentLetter.toLowerCase()}.mp4`;
             videoEl.play();
 
-            document.getElementById('quizGuideBox').style.display = 'none';
-            document.getElementById('quizFeedback').innerHTML = `Which ${quizDataset.toUpperCase()} letter is being signed above?`;
-            document.getElementById('quizFeedback').style.color = '#cfd8dc';
+            const badge = document.getElementById('quizSystemBadge');
+            if (badge) {
+                badge.textContent = quizCurrentDataset === 'asl' ? '🤟 ASL Question' : '🇮🇳 ISL Question';
+                badge.style.background = quizCurrentDataset === 'asl' ? 'rgba(79, 195, 247, 0.15)' : 'rgba(255, 152, 0, 0.15)';
+                badge.style.color = quizCurrentDataset === 'asl' ? '#4fc3f7' : '#ffb74d';
+                badge.style.borderColor = quizCurrentDataset === 'asl' ? 'rgba(79, 195, 247, 0.4)' : 'rgba(255, 152, 0, 0.4)';
+            }
 
+            document.getElementById('quizFeedback').innerHTML = `Which ${quizCurrentDataset.toUpperCase()} letter is being signed above?`;
+            document.getElementById('quizFeedback').style.color = '#cfd8dc';
+            document.getElementById('quizTeachingCard').style.display = 'none';
+
+            renderQuizChoices(letters);
+        }
+
+        function renderQuizChoices(letters) {
             let choices = [quizCurrentLetter];
             while (choices.length < 4) {
                 let randomChoice = letters[Math.floor(Math.random() * letters.length)];
@@ -997,52 +982,118 @@ How can I help you today? Here are some suggested questions:`;
                 btn.style.color = '#ffffff';
                 btn.style.boxShadow = '0 0 20px rgba(76, 175, 80, 0.6)';
 
-                const guideText = GESTURE_GUIDES[quizDataset][quizCurrentLetter] || '';
-                feedbackEl.innerHTML = `<span style="color:#4caf50;font-weight:bold;">🎉 Correct! Letter '${quizCurrentLetter}'</span><br><span style="font-size:12px;color:#cfd8dc;margin-top:4px;display:block;">${guideText}</span>`;
+                feedbackEl.innerHTML = `<span style="color:#4caf50;font-weight:bold;">🎉 Correct! That is Letter '${quizCurrentLetter}'! (+10 pts)</span>`;
+                document.getElementById('quizTeachingCard').style.display = 'none';
 
                 btns.forEach(b => b.disabled = true);
-                setTimeout(nextQuizQuestion, 2200);
+                setTimeout(nextQuizQuestion, 1600);
             } else {
                 quizStreak = 0;
                 document.getElementById('quizStreak').textContent = `0 🔥`;
+
                 btn.style.background = 'rgba(244, 67, 54, 0.3)';
                 btn.style.borderColor = '#f44336';
                 btn.style.color = '#ffffff';
-                feedbackEl.innerHTML = `<span style="color:#ff5252;font-weight:bold;">💡 Not quite! Try again or tap 'Learn Sign Guide'.</span>`;
+                btn.disabled = true;
+
+                const guideText = (GESTURE_GUIDES[quizCurrentDataset] && GESTURE_GUIDES[quizCurrentDataset][quizCurrentLetter]) || "Observe finger extensions closely.";
+                const teachBox = document.getElementById('quizTeachingCard');
+                teachBox.innerHTML = `
+                    <div style="font-weight:700;color:#ffb74d;margin-bottom:6px;font-size:13.5px;">💡 Learn This Sign:</div>
+                    <div style="font-size:13px;color:#e0f7fa;line-height:1.5;margin-bottom:12px;">${guideText}</div>
+                    <div style="display:flex;gap:10px;justify-content:center;">
+                        <button onclick="retryCurrentQuizQuestion()" style="background:#4fc3f7;color:#040c1c;border:none;padding:8px 16px;border-radius:14px;font-weight:700;font-size:12.5px;cursor:pointer;">🔄 Try Again</button>
+                        <button onclick="nextQuizQuestion()" style="background:rgba(255,255,255,0.1);color:#ffffff;border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:14px;font-weight:600;font-size:12.5px;cursor:pointer;">⏩ Pass / Skip</button>
+                    </div>
+                `;
+                teachBox.style.display = 'block';
+                feedbackEl.innerHTML = `<span style="color:#ffb74d;font-weight:bold;">Incorrect! Read the hand guide below and try again.</span>`;
             }
         }
 
-        function renderStudyCard() {
-            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-            const char = letters[studyIndex];
-            const videoEl = document.getElementById('studyVideo');
-            videoEl.src = `/${quizDataset}_dataset/${char.toLowerCase()}.mp4`;
+        function retryCurrentQuizQuestion() {
+            const btns = document.querySelectorAll('.quiz-opt-btn');
+            btns.forEach(b => {
+                b.disabled = false;
+                b.style.background = 'rgba(255, 255, 255, 0.06)';
+                b.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                b.style.color = '#ffffff';
+            });
+            document.getElementById('quizFeedback').innerHTML = `Which ${quizCurrentDataset.toUpperCase()} letter is being signed above?`;
+            document.getElementById('quizFeedback').style.color = '#cfd8dc';
+            document.getElementById('quizTeachingCard').style.display = 'none';
+        }
+
+        /* ============ EXPANDABLE GALLERY VIEWER FOR REFERENCE VIDEOS ============ */
+        let galleryDataset = 'asl';
+        let galleryIndex = 0;
+        const alphabetList = "abcdefghijklmnopqrstuvwxyz".split("");
+
+        function openGalleryViewer(dataset, letterIndex) {
+            galleryDataset = dataset || 'asl';
+            galleryIndex = typeof letterIndex === 'number' ? letterIndex : 0;
+
+            const modal = document.getElementById('referenceGalleryModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+
+            renderGallery();
+        }
+
+        function closeGalleryViewer() {
+            const modal = document.getElementById('referenceGalleryModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function navigateGallery(dir) {
+            galleryIndex = (galleryIndex + dir + 26) % 26;
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const char = alphabetList[galleryIndex];
+            const upper = char.toUpperCase();
+
+            const videoEl = document.getElementById('galleryVideo');
+            videoEl.src = `/${galleryDataset}_dataset/${char}.mp4`;
             videoEl.play();
 
-            document.getElementById('studyLetterTitle').textContent = `Letter '${char}' (${quizDataset.toUpperCase()})`;
-            document.getElementById('studyGuideText').textContent = GESTURE_GUIDES[quizDataset][char] || "Observe hand formation.";
-            document.getElementById('studyProgressText').textContent = `${studyIndex + 1} of 26`;
-        }
+            document.getElementById('galleryTitle').textContent = `Letter ${upper} (${galleryDataset.toUpperCase()})`;
+            document.getElementById('galleryWatermark').textContent = upper;
+            document.getElementById('galleryDatasetBadge').textContent = galleryDataset.toUpperCase() === 'ASL' ? '🤟 ASL Reference' : '🇮🇳 ISL Reference';
 
-        function prevStudy() {
-            if (studyIndex > 0) { studyIndex--; renderStudyCard(); }
-        }
-        function nextStudy() {
-            if (studyIndex < 25) { studyIndex++; renderStudyCard(); }
+            const thumbsRow = document.getElementById('galleryThumbsRow');
+            thumbsRow.innerHTML = '';
+            alphabetList.forEach((c, idx) => {
+                const u = c.toUpperCase();
+                const thumb = document.createElement('div');
+                thumb.className = `gallery-thumb-item ${idx === galleryIndex ? 'active' : ''}`;
+                thumb.innerHTML = `<span class="thumb-letter">${u}</span>`;
+                thumb.onclick = () => {
+                    galleryIndex = idx;
+                    renderGallery();
+                };
+                thumbsRow.appendChild(thumb);
+            });
+
+            const activeThumb = thumbsRow.children[galleryIndex];
+            if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
         window.openSignQuiz = openSignQuiz;
         window.closeSignQuiz = closeSignQuiz;
+        window.openGalleryViewer = openGalleryViewer;
+        window.closeGalleryViewer = closeGalleryViewer;
     </script>
 
-    <!-- 🎮 Sign Language Practice & Teaching Modal -->
+    <!-- 🎮 Jumbled Practice Quiz Modal -->
     <div id="signQuizModal" class="quiz-modal-overlay" style="display:none;">
         <div class="quiz-modal-card">
-            <!-- Header with Tabs -->
             <div class="quiz-modal-header">
-                <div class="quiz-tab-switcher">
-                    <button id="tabQuizBtn" class="quiz-tab-btn active" onclick="setQuizTab('quiz')">Practice Quiz</button>
-                    <button id="tabStudyBtn" class="quiz-tab-btn" onclick="setQuizTab('study')">Study &amp; Learn</button>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span id="quizSystemBadge" style="background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);padding:4px 12px;border-radius:14px;font-size:12px;font-weight:700;color:#4fc3f7;">ASL Question</span>
+                    <h3 style="margin:0;font-size:18px;color:#fff;">Sign Practice Quiz</h3>
                 </div>
                 <div class="quiz-score-board">
                     <span class="quiz-score-badge">Score: <strong id="quizScore">0</strong></span>
@@ -1050,31 +1101,38 @@ How can I help you today? Here are some suggested questions:`;
                     <button class="quiz-close-btn" onclick="closeSignQuiz()">&times;</button>
                 </div>
             </div>
-
-            <!-- Quiz Play Area -->
-            <div id="quizPlayArea" class="quiz-modal-body">
+            <div class="quiz-modal-body">
                 <div class="quiz-video-frame">
                     <video id="quizVideo" autoplay loop muted playsinline class="quiz-video"></video>
                     <div id="quizQuestionMark" class="quiz-question-mark">?</div>
                 </div>
                 <p id="quizFeedback" class="quiz-feedback-text">Which letter (A-Z) is being signed above?</p>
                 <div id="quizOptionsRow" class="quiz-options-grid"></div>
-                <button class="quiz-guide-toggle-btn" onclick="toggleGuideAccordion()">💡 Reveal Hand Gesture Guide</button>
-                <div id="quizGuideBox" class="quiz-guide-box" style="display:none;"></div>
+                <div id="quizTeachingCard" style="display:none;margin-top:14px;background:rgba(4,14,32,0.95);border:1px solid rgba(255,183,77,0.4);border-radius:14px;padding:14px;text-align:center;"></div>
             </div>
+        </div>
+    </div>
 
-            <!-- Study & Learn Area -->
-            <div id="studyPlayArea" class="quiz-modal-body" style="display:none;">
-                <div class="quiz-video-frame">
-                    <video id="studyVideo" autoplay loop muted playsinline class="quiz-video"></video>
+    <!-- 🖼️ Expandable Gallery Viewer Modal for Reference Videos -->
+    <div id="referenceGalleryModal" class="gallery-modal-overlay" style="display:none;">
+        <div class="gallery-modal-card">
+            <div class="gallery-header">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span id="galleryDatasetBadge" class="gallery-badge">ASL</span>
+                    <h3 id="galleryTitle" style="margin:0;font-size:20px;color:#fff;">Letter A Reference</h3>
                 </div>
-                <h4 id="studyLetterTitle" style="text-align:center;color:#4fc3f7;margin:10px 0 6px;font-size:18px;">Letter 'A'</h4>
-                <p id="studyGuideText" style="text-align:center;font-size:13px;color:#cfd8dc;line-height:1.5;margin:0 0 16px;min-height:42px;"></p>
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-                    <button onclick="prevStudy()" class="study-nav-btn">← Previous</button>
-                    <span id="studyProgressText" style="font-size:12px;color:rgba(255,255,255,0.6);">1 of 26</span>
-                    <button onclick="nextStudy()" class="study-nav-btn">Next →</button>
+                <button class="gallery-close-btn" onclick="closeGalleryViewer()">&times;</button>
+            </div>
+            <div class="gallery-stage">
+                <button class="gallery-arrow-btn left" onclick="navigateGallery(-1)">&#10094;</button>
+                <div class="gallery-video-wrapper">
+                    <video id="galleryVideo" autoplay loop muted playsinline class="gallery-video"></video>
+                    <div id="galleryWatermark" class="gallery-watermark">A</div>
                 </div>
+                <button class="gallery-arrow-btn right" onclick="navigateGallery(1)">&#10095;</button>
+            </div>
+            <div class="gallery-thumbs-wrapper">
+                <div id="galleryThumbsRow" class="gallery-thumbs-row"></div>
             </div>
         </div>
     </div>

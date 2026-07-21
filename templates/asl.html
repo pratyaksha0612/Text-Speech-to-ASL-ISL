@@ -71,7 +71,7 @@
 // A-Z Reference Grid setup with diagonal shimmer flash & clean letter layout
 (function(){
     const grid = document.getElementById('asl-sign-grid');
-    'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(l){
+    'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(l, idx){
         const upper = l.toUpperCase();
         const card = document.createElement('div');
         card.className = 'sign-grid-card';
@@ -118,9 +118,7 @@
         });
 
         card.addEventListener('click', function(){
-            vid.style.opacity = '1';
-            vid.currentTime = 0;
-            vid.play();
+            openGalleryViewer('asl', idx);
         });
 
         grid.appendChild(card);

@@ -129,7 +129,7 @@ video.addEventListener("timeupdate", () => {
 // Setup interactive A-Z grid with diagonal shimmer flash & clean letter layout
 (function() {
     const grid = document.getElementById('isl-sign-grid');
-    letters.forEach(function(l) {
+    letters.forEach(function(l, idx) {
         const upper = l.toUpperCase();
         const card = document.createElement('div');
         card.className = 'sign-grid-card';
@@ -178,9 +178,7 @@ video.addEventListener("timeupdate", () => {
         };
 
         card.onclick = function() {
-            vid.style.opacity = '1';
-            vid.currentTime = 0;
-            vid.play();
+            openGalleryViewer('isl', idx);
         };
 
         grid.appendChild(card);
