@@ -57,22 +57,73 @@
         {% endblock %}
     </main>
 
+    <!-- Enhanced Glassmorphic Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-left">
-                <h2>VYAKT</h2>
-                <p>Making communication accessible through technology.</p>
+            <!-- Brand Info Column -->
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">
+                    <img src="/static/logo-main.png" alt="VYAKT Logo" class="footer-logo-img">
+                    <span class="footer-logo-text">VYAKT</span>
+                </a>
+                <p class="footer-tagline">
+                    Bridging communication gaps by transforming spoken and written language into visual sign language in real time using Artificial Intelligence.
+                </p>
+                <div class="footer-badges">
+                    <span class="footer-badge">⚡ Real-Time AI</span>
+                    <span class="footer-badge">🤟 ASL &amp; ISL</span>
+                    <span class="footer-badge">🔒 100% Private</span>
+                </div>
             </div>
-            <div class="footer-right">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/creator">Creator</a>
-                <a href="/asl">ASL</a>
-                <a href="/isl">ISL</a>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About VYAKT</a></li>
+                    <li><a href="/creator">The Creator</a></li>
+                    <li><a href="/#faq">FAQ Section</a></li>
+                </ul>
+            </div>
+
+            <!-- Portals & Services -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Sign Portals</h4>
+                <ul class="footer-links">
+                    <li><a href="/asl">ASL A-Z Reference</a></li>
+                    <li><a href="/asl_text">ASL Text Translator</a></li>
+                    <li><a href="/asl_speech">ASL Speech Translator</a></li>
+                    <li><a href="/isl">ISL A-Z Reference</a></li>
+                    <li><a href="/isl_text">ISL Text Translator</a></li>
+                    <li><a href="/isl_speech">ISL Speech Translator</a></li>
+                </ul>
+            </div>
+
+            <!-- Creator & Support -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Vision &amp; Support</h4>
+                <p class="footer-creator-text">
+                    Envisioned and built with ❤️ by <strong>Pratyaksha</strong> to empower the Deaf &amp; Hard-of-Hearing community worldwide.
+                </p>
+                <button class="footer-ashi-btn" onclick="openAshi()">
+                    <span class="pulse-dot"></span>
+                    <span>Chat with Ashi AI</span>
+                </button>
             </div>
         </div>
+
+        <!-- Footer Bottom Bar -->
         <div class="footer-bottom">
-            &copy; 2026 VYAKT. All rights reserved.
+            <div class="footer-bottom-container">
+                <p>&copy; 2026 <strong>VYAKT</strong>. All rights reserved. Crafted by Pratyaksha.</p>
+                <a href="#top" class="back-to-top-btn">
+                    <span>Back to top</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M12 4l-8 8h5v8h6v-8h5z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -656,11 +707,6 @@
 
 • **Name:** ${n}
 • **Age:** ${a}
-• **Country:** ${c}
-• **Language:** ${langLabel}
-
-How can I help you today? Here are some suggested questions:`;
-                    addMsg('bot', md2(s));
 • **Country:** ${c}
 • **Language:** ${langLabel}
 
