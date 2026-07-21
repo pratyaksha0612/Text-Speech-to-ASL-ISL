@@ -566,11 +566,22 @@
             });
         }
 
-        /* Strict Onboarding Validation (No Gibberish Allowed) */
+        /* Strict Onboarding Validation (No Greetings or Gibberish Allowed) */
         function isValidName(name) {
             name = name.trim();
-            if (!/^[a-zA-Z\s\-']{2,30}$/.test(name)) return false;
+            // Must be 3 to 30 letters
+            if (!/^[a-zA-Z\s\-']{3,30}$/.test(name)) return false;
             const lower = name.toLowerCase();
+
+            // Blacklist of common greetings and filler words that MUST NEVER be accepted as names
+            const invalidNames = [
+                "hi", "hello", "hey", "hola", "bonjour", "hallo", "ciao", "namaste", "yo", "sup",
+                "test", "abc", "xyz", "bot", "ashi", "user", "admin", "guest", "none", "no", "yes",
+                "ok", "okay", "who", "what", "why", "how", "when", "where", "thanks", "thank",
+                "greetings", "good", "morning", "evening", "afternoon", "welcome"
+            ];
+            if (invalidNames.includes(lower)) return false;
+
             const mash = [
                 "qwerty", "asdfgh", "zxcvb", "dfghj", "ghjkl", "hjkl", "cvbnm", "wert", "yuiop", "sdfg",
                 "axnas", "xnask", "asdf", "zxcv", "qwer", "hjkl", "vbnm", "uiop", "erty", "dfgh", "axnask"
@@ -696,51 +707,38 @@
                 else if (lower.includes('ciao')) detectedLang = 'it';
 
                 ashiProfile.lang = detectedLang;
-
-                let cleanName = text.replace(/^(hi|hello|hey|my name is|i am)\s+/i, '').trim();
-                if (isValidName(cleanName)) {
-                    ashiProfile.name = cleanName;
-                    ashiStep = 'age';
-                    setTimeout(() => {
-                        const q = (detectedLang === 'hi') ? `नमस्ते, **${cleanName}**! आपकी उम्र क्या है?` :
-                            `Nice to meet you, **${cleanName}**! How old are you?`;
-                        addMsg('bot', md2(q));
-                        inp.placeholder = 'Your age (e.g. 21)...';
-                        document.getElementById('ashi-msgs').scrollTop = 99999;
-                    }, 400);
-                } else {
-                    ashiStep = 'name';
-                    setTimeout(() => {
-                        const g = (detectedLang === 'hi') ? "नमस्ते! मैंने हिंदी चुन ली है। 😊 आपका नाम क्या है?" :
-                            (detectedLang === 'es') ? "¡Hola! He seleccionado Español. 😊 ¿Cómo te llamas?" :
-                            (detectedLang === 'fr') ? "Bonjour ! J'ai sélectionné le Français. 😊 Quel est votre prénom ?" :
-                            (detectedLang === 'de') ? "Hallo! Ich habe Deutsch gewählt. 😊 Wie heißen Sie?" :
-                            (detectedLang === 'it') ? "Ciao! Ho selezionato l'Italiano. 😊 Come ti chiami?" :
-                            "Hello! I've set your language to English! 😊 What is your real name?";
-                        addMsg('bot', md2(g));
-                        inp.placeholder = 'Your real name...';
-                        document.getElementById('ashi-msgs').scrollTop = 99999;
-                    }, 400);
-                }
+                ashiStep = 'name';
+                setTimeout(() => {
+                    const g = (detectedLang === 'hi') ? "नमस्ते! मैंने भाषा चुन ली है। 😊 आपका नाम क्या है?" :
+                        (detectedLang === 'es') ? "¡Hola! He seleccionado Español. 😊 ¿Cómo te llamas?" :
+                        (detectedLang === 'fr') ? "Bonjour ! J'ai sélectionné le Français. 😊 Quel est votre prénom ?" :
+                        (detectedLang === 'de') ? "Hallo! Ich habe Deutsch gewählt. 😊 Wie heißen Sie?" :
+                        (detectedLang === 'it') ? "Ciao! Ho selezionato l'Italiano. 😊 Come ti chiami?" :
+                        "Hello! I've set your language to English! 😊 What is your real name?";
+                    addMsg('bot', md2(g));
+                    inp.placeholder = 'Your real name...';
+                    document.getElementById('ashi-msgs').scrollTop = 99999;
+                }, 300);
                 return;
             }
 
             const lang = ashiProfile.lang || 'en';
             if (ashiStep === 'name') {
-                if (!isValidName(text)) {
-                    addMsg('bot', md2("⚠️ Please enter a valid name (letters only, no keyboard mashing):"));
+                let cleanName = text.replace(/^(my name is|i am|call me|myself)\s+/i, '').trim();
+                if (!isValidName(cleanName)) {
+                    addMsg('bot', md2("⚠️ Please enter a valid real name (3+ letters, no greetings or keyboard mashing):"));
                     inp.placeholder = 'Enter valid name...';
                     return;
                 }
-                ashiProfile.name = text;
+                ashiProfile.name = cleanName;
                 ashiStep = 'age';
                 setTimeout(() => {
-                    const q = (lang === 'hi') ? `अच्छा, **${text}**! आपकी उम्र क्या है?` :
-                        (lang === 'es') ? `Encantada, **${text}**! ¿Cuantos anos tienes?` :
-                            (lang === 'fr') ? `Ravi de vous rencontrer, **${text}** ! Quel est votre age ?` :
-                                (lang === 'de') ? `Schon, **${text}**! Wie alt sind Sie?` :
-                                    (lang === 'it') ? `Piacere, **${text}**! Quanti anni hai?` :
-                                        `Nice to meet you, **${text}**! How old are you?`;
+                    const q = (lang === 'hi') ? `अच्छा, **${cleanName}**! आपकी उम्र क्या है?` :
+                        (lang === 'es') ? `Encantada, **${cleanName}**! ¿Cuántos años tienes?` :
+                        (lang === 'fr') ? `Ravi de vous rencontrer, **${cleanName}** ! Quel est votre âge ?` :
+                        (lang === 'de') ? `Schön, **${cleanName}**! Wie alt sind Sie?` :
+                        (lang === 'it') ? `Piacere, **${cleanName}**! Quanti anni hai?` :
+                        `Nice to meet you, **${cleanName}**! How old are you?`;
                     addMsg('bot', md2(q));
                     inp.placeholder = 'Your age (e.g. 21)...';
                     document.getElementById('ashi-msgs').scrollTop = 99999;
@@ -803,7 +801,7 @@ How can I help you today? Here are some suggested questions:`;
                     addMsg('bot', md2(s));
 
                     const chips = (lang === 'hi') ? ['साइट का उपयोग कैसे करें?', 'ASL क्या है?', 'ISL क्या है?', 'गति कैसे बदलें?', 'व्यक्त किसने बनाया?'] :
-                        (lang === 'es') ? ['¿Cómo usar el sitio?', 'Qué es ASL', 'Qué es ISL', 'Ajustar velocidad', '¿Quién creó VYAKT?'] :
+                        (lang === 'es') ? ['¿Cómo usar el sitio?', 'Qué is ASL', 'Qué is ISL', 'Ajustar velocidad', '¿Quién creó VYAKT?'] :
                             ['How do I use the translator?', 'Tell me about ASL', 'Tell me about ISL', 'Adjust playback speed', 'Who made VYAKT?', 'What is sign language?'];
                     setTimeout(() => showChips(chips), 300);
                     inp.placeholder = 'Ask me anything...';
@@ -906,12 +904,18 @@ How can I help you today? Here are some suggested questions:`;
         let quizScore = 0;
         let quizStreak = 0;
 
-        function openSignQuiz() {
-            document.getElementById('signQuizModal').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('signQuizModal').classList.add('active');
-            }, 10);
-            nextQuizQuestion();
+        function openSignQuiz(initialType) {
+            if (initialType === 'asl' || initialType === 'isl') {
+                quizCurrentDataset = initialType;
+            }
+            const modal = document.getElementById('signQuizModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+                nextQuizQuestion();
+            }
         }
 
         function closeSignQuiz() {
