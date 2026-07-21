@@ -288,21 +288,18 @@ body::before, body::after {
 
 /* NAVBAR */
 nav {
-
     position: fixed;
-
     top: 0;
-
     left: 0;
-
     width: 100%;
-
     display: flex;
-
     justify-content: center;
-
     z-index: 1000;
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
 
+nav.nav-hidden {
+    transform: translateY(-100%);
 }
 
 
@@ -2786,4 +2783,79 @@ color:#cfe8ff;
     border-color: #4fc3f7;
     color: #4fc3f7;
     transform: translateY(-2px);
+}
+
+/* Quiz & Study Tab Switcher */
+.quiz-tab-switcher {
+    display: flex;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quiz-tab-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.quiz-tab-btn.active {
+    background: #4fc3f7;
+    color: #040c1c;
+    font-weight: 700;
+    box-shadow: 0 0 12px rgba(79, 195, 247, 0.6);
+}
+
+.quiz-guide-toggle-btn {
+    width: 100%;
+    margin-top: 14px;
+    background: rgba(79, 195, 247, 0.08);
+    border: 1px dashed rgba(79, 195, 247, 0.35);
+    color: #4fc3f7;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quiz-guide-toggle-btn:hover {
+    background: rgba(79, 195, 247, 0.18);
+}
+
+.quiz-guide-box {
+    margin-top: 10px;
+    background: rgba(4, 14, 32, 0.9);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #e0f7fa;
+    line-height: 1.5;
+}
+
+.study-nav-btn {
+    background: rgba(79, 195, 247, 0.12);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.study-nav-btn:hover {
+    background: #4fc3f7;
+    color: #040c1c;
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
 }
