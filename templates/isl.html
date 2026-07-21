@@ -150,9 +150,15 @@ video.addEventListener("timeupdate", () => {
         vid.playsInline = true;
         vid.preload = 'metadata';
 
+        // Bottom letter tag (always visible over video)
+        const tag = document.createElement('div');
+        tag.className = 'card-letter-tag';
+        tag.textContent = upper;
+
         card.appendChild(shimmer);
         card.appendChild(mark);
         card.appendChild(vid);
+        card.appendChild(tag);
 
         vid.addEventListener('loadedmetadata', function() {
             if (vid.duration) {
