@@ -2191,3 +2191,110 @@ border:1px solid #3aa0ff;
 background:rgba(58,160,255,0.25);
 color:#cfe8ff;
 }
+
+/* ================= DIAGONAL FLASH SHIMMER PLACEHOLDER ================= */
+
+@keyframes diagonalFlash {
+    0% {
+        transform: translateX(-160%) rotate(25deg);
+    }
+    100% {
+        transform: translateX(180%) rotate(25deg);
+    }
+}
+
+.shimmer-placeholder {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #08172c 0%, #030814 100%);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.shimmer-placeholder::after {
+    content: "";
+    position: absolute;
+    top: -70%;
+    left: -70%;
+    width: 240%;
+    height: 240%;
+    background: linear-gradient(
+        75deg,
+        transparent 35%,
+        rgba(79, 195, 247, 0.04) 44%,
+        rgba(79, 195, 247, 0.22) 50%,
+        rgba(255, 255, 255, 0.3) 52%,
+        rgba(79, 195, 247, 0.22) 54%,
+        rgba(79, 195, 247, 0.04) 56%,
+        transparent 65%
+    );
+    animation: diagonalFlash 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* REDESIGNED GRID CARD STYLING (NO BOTTOM BLACK BANNER) */
+.sign-grid-card {
+    position: relative;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #091a33 0%, #040914 100%);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.sign-grid-card:hover {
+    transform: translateY(-5px) scale(1.04);
+    border-color: rgba(79, 195, 247, 0.9);
+    box-shadow: 0 10px 30px rgba(79, 195, 247, 0.35);
+}
+
+.sign-grid-card .card-letter-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 4;
+    font-size: 13px;
+    font-weight: 800;
+    color: #4fc3f7;
+    background: rgba(6, 18, 38, 0.85);
+    border: 1px solid rgba(79, 195, 247, 0.4);
+    border-radius: 8px;
+    padding: 3px 9px;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 1px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.sign-grid-card .center-letter-mark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    font-size: 34px;
+    font-weight: 900;
+    color: rgba(79, 195, 247, 0.7);
+    text-shadow: 0 0 18px rgba(79, 195, 247, 0.4);
+    font-family: 'Outfit', sans-serif;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sign-grid-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    position: relative;
+    z-index: 3;
+}
