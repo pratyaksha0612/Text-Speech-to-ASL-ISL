@@ -3491,3 +3491,118 @@ color:#cfe8ff;
     box-shadow: 0 0 25px rgba(79, 195, 247, 0.6);
     transform: translateY(-3px);
 }
+
+/* ================= GLOBAL RESPONSIVE MEDIA QUERIES ================= */
+
+/* Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .hero-layout {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .language-card {
+        width: 100%;
+        max-width: 380px;
+    }
+    
+    .works-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+    nav {
+        padding: 12px 18px;
+    }
+    
+    nav .nav-links {
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav .nav-links a {
+        font-size: 13px;
+    }
+    
+    .about-hero h1, .creator-name, .works-title {
+        font-size: 34px !important;
+    }
+    
+    .works-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .creator-statement-card {
+        padding: 24px 20px;
+    }
+
+    .gallery-modal-card, .quiz-modal-card {
+        width: 95vw;
+        padding: 18px;
+    }
+
+    .gallery-stage {
+        flex-direction: column;
+    }
+
+    .gallery-video-wrapper {
+        width: 100%;
+        max-width: 280px;
+        height: 280px;
+    }
+
+    #ashi-trigger {
+        width: 105px !important;
+        height: 145px !important;
+        right: 10px !important;
+    }
+
+    .ashi-trigger-img {
+        width: 105px !important;
+        height: 145px !important;
+    }
+
+    #ashi-panel {
+        flex-direction: column !important;
+        height: 94vh !important;
+    }
+
+    #ashi-left {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: 140px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    #ashi-panel-img {
+        height: 160px !important;
+        width: auto !important;
+    }
+}
+
+/* Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .about-page, .creator-page, .works-section {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .footer-bottom-container {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .quiz-options-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
