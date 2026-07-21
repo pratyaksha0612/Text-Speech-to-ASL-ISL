@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="learn-page" style="max-width: 1100px; margin: 0 auto; padding: 120px 20px 60px; color: white; text-align: center;">
+    
+    <!-- Hero Header -->
+    <h1 style="font-size: 42px; font-weight: 800; background: linear-gradient(90deg, #9be7ff, #4fc3f7, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; text-shadow: 0 0 25px rgba(79, 195, 247, 0.4);">
+        Interactive Sign Language Learning Hub
+    </h1>
+    <p style="font-size: 16px; color: #cfd8dc; max-width: 720px; margin: 0 auto 36px; line-height: 1.6;">
+        Master Sign Language letter-by-letter. Choose between American Sign Language (ASL) and Indian Sign Language (ISL), select any specific letter, or follow our guided step-by-step tutorials.
+    </p>
+
+    <!-- Language Selector Bar -->
+    <div style="display: inline-flex; background: rgba(255, 255, 255, 0.05); padding: 5px; border-radius: 30px; border: 1px solid rgba(79, 195, 247, 0.3); margin-bottom: 30px; backdrop-filter: blur(10px);">
+        <button id="aslLangBtn" onclick="switchLearnDataset('asl')" style="background: #4fc3f7; color: #040c1c; border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);">
+            🤟 ASL (American Sign)
+        </button>
+        <button id="islLangBtn" onclick="switchLearnDataset('isl')" style="background: transparent; color: rgba(255, 255, 255, 0.7); border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            🇮🇳 ISL (Indian Sign)
+        </button>
+    </div>
+
+    <!-- Letter Selector Grid (A to Z) -->
+    <div style="background: rgba(4, 14, 32, 0.75); border: 1px solid rgba(79, 195, 247, 0.25); border-radius: 20px; padding: 20px; margin-bottom: 40px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #4fc3f7; font-weight: 700; margin-bottom: 15px;">
+            Select Any Specific Letter to Study
+        </div>
+        <div id="alphabetGrid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>
+    </div>
+
+    <!-- Main Learning Card Area -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: start; background: linear-gradient(145deg, rgba(8, 24, 52, 0.85), rgba(4, 12, 28, 0.95)); border: 1px solid rgba(79, 195, 247, 0.35); border-radius: 24px; padding: 35px; backdrop-filter: blur(15px); box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(79, 195, 247, 0.15);">
+        
+        <!-- Video Player Column -->
+        <div>
+            <div style="position: relative; width: 100%; aspect-ratio: 1; max-width: 380px; margin: 0 auto; border-radius: 20px; overflow: hidden; border: 2px solid rgba(79, 195, 247, 0.4); box-shadow: 0 0 30px rgba(79, 195, 247, 0.25);">
+                <video id="learnVideo" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block;"></video>
+                <div id="videoLetterOverlay" style="position: absolute; top: 12px; left: 12px; background: rgba(4, 12, 28, 0.85); border: 1px solid #4fc3f7; padding: 6px 14px; border-radius: 12px; font-size: 16px; font-weight: 800; color: #4fc3f7; backdrop-filter: blur(6px);">
+                    Letter A
+                </div>
+            </div>
+
+            <!-- Speed & Playback Controls -->
+            <div style="margin-top: 20px; background: rgba(255, 255, 255, 0.04); padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 13px; color: #4fc3f7; font-weight: 600;">Playback Speed</span>
+                    <span id="learnSpeedValue" style="font-size: 13px; color: white; font-weight: 700;">1.00x</span>
+                </div>
+                <input type="range" id="learnSpeedSlider" min="0.25" max="2.0" step="0.05" value="1.0" style="width: 100%; accent-color: #4fc3f7; cursor: pointer;">
+            </div>
+        </div>
+
+        <!-- Hand Configuration & Tutorial Column -->
+        <div style="text-align: left; display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
+            <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <h2 id="learnTitle" style="font-size: 32px; font-weight: 800; color: #ffffff; margin: 0;">
+                        Letter 'A'
+                    </h2>
+                    <span id="learnLangBadge" style="background: rgba(79, 195, 247, 0.15); border: 1px solid rgba(79, 195, 247, 0.4); padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 700; color: #4fc3f7;">
+                        ASL System
+                    </span>
+                </div>
+
+                <div style="height: 2px; background: linear-gradient(90deg, #4fc3f7, transparent); margin-bottom: 20px;"></div>
+
+                <!-- Hand Gesture Guide -->
+                <div style="background: rgba(4, 14, 32, 0.7); border: 1px solid rgba(79, 195, 247, 0.2); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="color: #4fc3f7; margin: 0 0 10px 0; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                        <span>🖐️</span> Hand Shape &amp; Formation Guide
+                    </h4>
+                    <p id="learnDescription" style="font-size: 14px; color: #e0f7fa; line-height: 1.65; margin: 0;">
+                        Loading instructions...
+                    </p>
+                </div>
+
+                <!-- Key Takeaways & Practice Tips -->
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px;">
+                    <h4 style="color: #ffd54f; margin: 0 0 8px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                        <span>💡</span> Pro Practice Tip
+                    </h4>
+                    <p id="learnTip" style="font-size: 13px; color: rgba(207, 216, 220, 0.85); line-height: 1.5; margin: 0;">
+                        Keep your hand positioned comfortably at chest level and maintain steady finger posture.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 25px; gap: 15px;">
+                <button onclick="navigateLearn(-1)" style="flex: 1; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px; border-radius: 16px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s ease;" onmouseover="this.style.background='rgba(79, 195, 247, 0.2)'; this.style.borderColor='#4fc3f7';" onmouseout="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.borderColor='rgba(255, 255, 255, 0.2)';">
+                    ← Previous
+                </button>
+                <span id="learnProgressCounter" style="font-size: 13px; color: #4fc3f7; font-weight: 700; min-width: 70px; text-align: center;">
+                    1 / 26
+                </span>
+                <button onclick="navigateLearn(1)" style="flex: 1; background: linear-gradient(135deg, rgba(79, 195, 247, 0.3), rgba(124, 77, 255, 0.3)); border: 1px solid #4fc3f7; color: white; padding: 12px; border-radius: 16px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 0 15px rgba(79, 195, 247, 0.3);" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='translateY(0)';">
+                    Next Letter →
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let currentLearnDataset = 'asl';
+    let currentLearnIndex = 0;
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    const LEARN_GUIDES = {
+        asl: {
+            A: { desc: "Make a fist with your dominant hand, keeping your thumb upright resting flat against the side of your index finger.", tip: "Keep your thumb flush against the side of your palm rather than tucked underneath." },
+            B: { desc: "Extend four fingers straight up together, and fold your thumb neatly across your palm.", tip: "Ensure your four fingers are touching each other with no gaps between them." },
+            C: { desc: "Curve your fingers and thumb to form a clear 'C' shape facing sideways.", tip: "Orient your palm to the side so the open C curve is clearly visible from the front." },
+            D: { desc: "Touch your thumb to your middle, ring, and pinky finger tips, pointing your index finger straight up.", tip: "The index finger should point straight to the sky like a single erect digit." },
+            E: { desc: "Curl all four fingers down so fingernails touch the top of your thumb folded into your palm.", tip: "Do not press your thumb flat under your fingers; rest finger tips on top of thumb." },
+            F: { desc: "Touch the tip of your index finger to your thumb tip, extending your other three fingers straight up.", tip: "Make a clean circle with thumb and index while keeping remaining 3 fingers fanned out." },
+            G: { desc: "Point your index finger and thumb horizontally, parallel to each other like a small pinch.", tip: "Hold hand sideways with index finger pointing across your chest." },
+            H: { desc: "Extend your index and middle fingers together horizontally, with thumb tucked across your palm.", tip: "Keep index and middle finger pressed side-by-side horizontally." },
+            I: { desc: "Form a loose fist and raise your pinky finger straight up into the air.", tip: "Make sure only the pinky finger is extended while other 3 fingers stay closed." },
+            J: { desc: "Raise your pinky finger and trace a small curve or letter 'J' shape in the air.", tip: "Initiate the gesture with an extended pinky and carve a soft downward swoop." },
+            K: { desc: "Point index finger straight up, middle finger angled forward, with thumb tucked between them.", tip: "Your thumb tip should touch the middle joint of your middle finger." },
+            L: { desc: "Extend thumb and index finger outward at a 90-degree angle to form an 'L' shape.", tip: "Form a sharp right angle between thumb and index finger facing forward." },
+            M: { desc: "Tuck thumb under your first three fingers (index, middle, ring) resting in a fist.", tip: "Three finger knuckles should rest right over top of the thumb." },
+            N: { desc: "Tuck thumb under your first two fingers (index, middle) resting in a fist.", tip: "Two finger knuckles rest over top of the thumb (distinguishing it from 'M')." },
+            O: { desc: "Touch all finger tips to thumb tip forming a circular 'O' shape.", tip: "All four finger tips touch the thumb simultaneously to form a hollow circle." },
+            P: { desc: "Point a 'K' hand shape downwards.", tip: "Simply rotate your wrist downward from the 'K' position." },
+            Q: { desc: "Point a 'G' hand shape downwards.", tip: "Rotate your wrist downward so index and thumb pinch towards the floor." },
+            R: { desc: "Cross your index and middle fingers together like making a wish.", tip: "Twist index finger over middle finger cleanly." },
+            S: { desc: "Make a tight fist with thumb folded horizontally across your fingers.", tip: "Contrast with 'A': Thumb crosses over front of fingers for 'S'." },
+            T: { desc: "Tuck thumb under your index finger inside a fist.", tip: "Only index finger rests over top of the thumb." },
+            U: { desc: "Extend index and middle fingers straight up together.", tip: "Keep index and middle fingers locked side-by-side pointing upward." },
+            V: { desc: "Extend index and middle fingers straight up spread apart in a 'V' shape.", tip: "Separate index and middle finger into a peace sign." },
+            W: { desc: "Extend index, middle, and ring fingers straight up in a 'W' shape.", tip: "Fan out three fingers to resemble the letter W." },
+            X: { desc: "Curve your index finger into a hook shape with your fist closed.", tip: "Bend only the top two joints of index finger into a claw." },
+            Y: { desc: "Extend thumb and pinky finger out while keeping middle 3 fingers closed.", tip: "Resembles the 'hang loose' hand gesture." },
+            Z: { desc: "Use your index finger to draw a 'Z' path in the air.", tip: "Draw three sharp line segments in space: right, diagonal left, right." }
+        },
+        isl: {
+            A: { desc: "Form a closed fist with your non-dominant hand and touch the tip of your dominant index finger to the thumb.", tip: "Use both hands: Non-dominant fist serves as baseline base." },
+            B: { desc: "Hold your non-dominant hand flat facing up and place your dominant open palm perpendicular onto it.", tip: "Form a T-junction between both flat open hands." },
+            C: { desc: "Curve both hands to form a double curved 'C' configuration.", tip: "Both hands join to form a larger visible C outline." },
+            D: { desc: "Touch dominant index finger tip to non-dominant index tip forming a D loop.", tip: "Keep fingers arched to maintain a clean circular loop." },
+            E: { desc: "Touch dominant index tip to non-dominant index finger joint.", tip: "Precision is key: Target the middle knuckle joint." },
+            F: { desc: "Place dominant index & middle finger across non-dominant fingers.", tip: "Cross two fingers over the opposite hand's index." },
+            G: { desc: "Form two fists and press thumbs together.", tip: "Bring both fist thumbs into gentle contact." },
+            H: { desc: "Sweep dominant palm across non-dominant flat palm.", tip: "Slide top hand smoothly across bottom palm." },
+            I: { desc: "Touch dominant index finger to non-dominant pinky tip.", tip: "Point directly to the tip of your opposite pinky finger." },
+            J: { desc: "Hook dominant index finger onto non-dominant palm.", tip: "Trace a small hook on your opposite palm." },
+            K: { desc: "Angle dominant hooked index finger onto non-dominant index finger.", tip: "Lock curved index finger over non-dominant index finger." },
+            L: { desc: "Form an L with dominant hand and lay across non-dominant palm.", tip: "Rest L configuration flat onto open palm." },
+            M: { desc: "Place three dominant fingers across non-dominant palm.", tip: "Lay index, middle, ring fingers across open hand." },
+            N: { desc: "Place two dominant fingers across non-dominant palm.", tip: "Lay index and middle fingers across open hand." },
+            O: { desc: "Form an O with non-dominant hand and insert dominant index finger.", tip: "Insert index tip through non-dominant O ring." },
+            P: { desc: "Form a circle with dominant thumb & index, touching non-dominant index tip.", tip: "Touch fingertips together firmly." },
+            Q: { desc: "Hook dominant thumb and index into non-dominant hand.", tip: "Interlock hand digits securely." },
+            R: { desc: "Form an R cross with dominant index finger on non-dominant palm.", tip: "Lay crossed fingers onto flat palm." },
+            S: { desc: "Cross pinky fingers of both hands together.", tip: "Hook small pinky fingers at chest level." },
+            T: { desc: "Touch dominant index finger to edge of non-dominant palm.", tip: "Touch pinky side edge of opposite hand." },
+            U: { desc: "Form a U with both index & middle fingers touching.", tip: "Hold both hands upward touching at tips." },
+            V: { desc: "Form a V shape with both hands touching at fingertips.", tip: "Make a dual V with fingers." },
+            W: { desc: "Interlock fingers of both hands extending upward.", tip: "Clasp hands with fingers pointing straight up." },
+            X: { desc: "Cross index fingers of both hands to form an X.", tip: "Form a clean X cross at chest level." },
+            Y: { desc: "Extend thumb and pinky of dominant hand over non-dominant palm.", tip: "Rest Y hand shape on open palm." },
+            Z: { desc: "Form Z shape by slicing dominant hand across non-dominant palm.", tip: "Slice hand across opposite palm in Z motion." }
+        }
+    };
+
+    function renderAlphabetGrid() {
+        const grid = document.getElementById('alphabetGrid');
+        grid.innerHTML = '';
+        letters.forEach((char, idx) => {
+            const btn = document.createElement('button');
+            btn.textContent = char;
+            btn.style.cssText = `
+                width: 38px; height: 38px; border-radius: 10px; border: 1px solid rgba(79, 195, 247, 0.3);
+                background: ${idx === currentLearnIndex ? '#4fc3f7' : 'rgba(255, 255, 255, 0.05)'};
+                color: ${idx === currentLearnIndex ? '#040c1c' : '#ffffff'};
+                font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+                box-shadow: ${idx === currentLearnIndex ? '0 0 12px rgba(79, 195, 247, 0.7)' : 'none'};
+            `;
+            btn.onclick = () => selectLearnLetter(idx);
+            grid.appendChild(btn);
+        });
+    }
+
+    function selectLearnLetter(idx) {
+        currentLearnIndex = idx;
+        renderAlphabetGrid();
+        updateLearnCard();
+    }
+
+    function switchLearnDataset(dataset) {
+        currentLearnDataset = dataset;
+        const aslBtn = document.getElementById('aslLangBtn');
+        const islBtn = document.getElementById('islLangBtn');
+
+        if (dataset === 'asl') {
+            aslBtn.style.cssText = 'background: #4fc3f7; color: #040c1c; border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);';
+            islBtn.style.cssText = 'background: transparent; color: rgba(255, 255, 255, 0.7); border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;';
+            document.getElementById('learnLangBadge').textContent = 'ASL System';
+        } else {
+            islBtn.style.cssText = 'background: #4fc3f7; color: #040c1c; border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);';
+            aslBtn.style.cssText = 'background: transparent; color: rgba(255, 255, 255, 0.7); border: none; padding: 10px 24px; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;';
+            document.getElementById('learnLangBadge').textContent = 'ISL System';
+        }
+        updateLearnCard();
+    }
+
+    function updateLearnCard() {
+        const char = letters[currentLearnIndex];
+        const video = document.getElementById('learnVideo');
+        video.src = `/${currentLearnDataset}_dataset/${char.toLowerCase()}.mp4`;
+        video.play();
+
+        document.getElementById('videoLetterOverlay').textContent = `Letter ${char}`;
+        document.getElementById('learnTitle').textContent = `Letter '${char}'`;
+
+        const guideData = (LEARN_GUIDES[currentLearnDataset] && LEARN_GUIDES[currentLearnDataset][char]) || {
+            desc: "Observe hand shape, finger extensions, and movement in the video.",
+            tip: "Practice slowly in front of a mirror to ensure clean finger execution."
+        };
+
+        document.getElementById('learnDescription').textContent = guideData.desc;
+        document.getElementById('learnTip').textContent = guideData.tip;
+        document.getElementById('learnProgressCounter').textContent = `${currentLearnIndex + 1} / 26`;
+    }
+
+    function navigateLearn(direction) {
+        currentLearnIndex = (currentLearnIndex + direction + 26) % 26;
+        renderAlphabetGrid();
+        updateLearnCard();
+    }
+
+    // Speed Slider Listener
+    document.getElementById('learnSpeedSlider').addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        document.getElementById('learnSpeedValue').textContent = val.toFixed(2) + 'x';
+        document.getElementById('learnVideo').playbackRate = val;
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderAlphabetGrid();
+        updateLearnCard();
+    });
+</script>
+{% endblock %}

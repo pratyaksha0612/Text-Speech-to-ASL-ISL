@@ -177,6 +177,10 @@ def asl_home():
 def isl_home():
     return render_template('isl.html')
 
+@app.route('/learn')
+def learn_page():
+    return render_template('learn.html')
+
 @app.route('/asl_text')
 def asl_text_page():
     return render_template('asl_text.html')

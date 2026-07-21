@@ -47,6 +47,7 @@
                 <a href="/creator">Creator</a>
                 <a href="/isl">ISL</a>
                 <a href="/asl">ASL</a>
+                <a href="/learn" style="color:#4fc3f7;font-weight:600;">Learn</a>
                 <a href="#" onclick="openSignQuiz('asl'); return false;" style="color:#4fc3f7;font-weight:600;">Quiz</a>
                 <a href="/#faq">FAQ</a>
             </div>
@@ -683,8 +684,48 @@
         }
 
         function ashiOnboard(text) {
-            const lang = ashiProfile.lang;
             const inp = document.getElementById('ashi-input');
+
+            if (ashiStep === 'lang') {
+                let detectedLang = 'en';
+                const lower = text.toLowerCase();
+                if (lower.includes('नमस्ते') || lower.includes('हिंदी')) detectedLang = 'hi';
+                else if (lower.includes('hola')) detectedLang = 'es';
+                else if (lower.includes('bonjour')) detectedLang = 'fr';
+                else if (lower.includes('hallo')) detectedLang = 'de';
+                else if (lower.includes('ciao')) detectedLang = 'it';
+
+                ashiProfile.lang = detectedLang;
+
+                let cleanName = text.replace(/^(hi|hello|hey|my name is|i am)\s+/i, '').trim();
+                if (isValidName(cleanName)) {
+                    ashiProfile.name = cleanName;
+                    ashiStep = 'age';
+                    setTimeout(() => {
+                        const q = (detectedLang === 'hi') ? `नमस्ते, **${cleanName}**! आपकी उम्र क्या है?` :
+                            `Nice to meet you, **${cleanName}**! How old are you?`;
+                        addMsg('bot', md2(q));
+                        inp.placeholder = 'Your age (e.g. 21)...';
+                        document.getElementById('ashi-msgs').scrollTop = 99999;
+                    }, 400);
+                } else {
+                    ashiStep = 'name';
+                    setTimeout(() => {
+                        const g = (detectedLang === 'hi') ? "नमस्ते! मैंने हिंदी चुन ली है। 😊 आपका नाम क्या है?" :
+                            (detectedLang === 'es') ? "¡Hola! He seleccionado Español. 😊 ¿Cómo te llamas?" :
+                            (detectedLang === 'fr') ? "Bonjour ! J'ai sélectionné le Français. 😊 Quel est votre prénom ?" :
+                            (detectedLang === 'de') ? "Hallo! Ich habe Deutsch gewählt. 😊 Wie heißen Sie?" :
+                            (detectedLang === 'it') ? "Ciao! Ho selezionato l'Italiano. 😊 Come ti chiami?" :
+                            "Hello! I've set your language to English! 😊 What is your real name?";
+                        addMsg('bot', md2(g));
+                        inp.placeholder = 'Your real name...';
+                        document.getElementById('ashi-msgs').scrollTop = 99999;
+                    }, 400);
+                }
+                return;
+            }
+
+            const lang = ashiProfile.lang || 'en';
             if (ashiStep === 'name') {
                 if (!isValidName(text)) {
                     addMsg('bot', md2("⚠️ Please enter a valid name (letters only, no keyboard mashing):"));
