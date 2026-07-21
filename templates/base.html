@@ -23,7 +23,8 @@
             </h3>
             <div
                 style="background:linear-gradient(145deg, #091a33 0%, #040914 100%);border-radius:16px;overflow:hidden;width:100%;aspect-ratio:1;margin:0 auto;border:1px solid rgba(79,195,247,.4);box-shadow:0 0 25px rgba(79,195,247,.2);">
-                <video id="translationVideo" style="width:100%;height:100%;background:transparent;display:block;object-fit:cover;"></video>
+                <video id="translationVideo"
+                    style="width:100%;height:100%;background:transparent;display:block;object-fit:cover;"></video>
             </div>
             <div id="currentSignLabel"
                 style="margin-top:14px;font-size:19px;color:#4fc3f7;font-weight:700;text-transform:uppercase;min-height:24px;letter-spacing:1px;">
@@ -69,12 +70,13 @@
                     <span class="footer-logo-text">VYAKT</span>
                 </a>
                 <p class="footer-tagline">
-                    Bridging communication gaps by transforming spoken and written language into visual sign language in real time using Artificial Intelligence.
+                    Bridging communication gaps by transforming spoken and written language into visual sign language in
+                    real time using Artificial Intelligence.
                 </p>
                 <div class="footer-badges">
-                    <span class="footer-badge">⚡ Real-Time AI</span>
-                    <span class="footer-badge">🤟 ASL &amp; ISL</span>
-                    <span class="footer-badge">🔒 100% Private</span>
+                    <span class="footer-badge">Real-Time AI</span>
+                    <span class="footer-badge">ASL &amp; ISL</span>
+                    <span class="footer-badge">100% Private</span>
                 </div>
             </div>
 
@@ -106,7 +108,8 @@
             <div class="footer-col">
                 <h4 class="footer-col-title">Vision &amp; Support</h4>
                 <p class="footer-creator-text">
-                    Envisioned and built with ❤️ by <strong>Pratyaksha</strong> to empower the Deaf &amp; Hard-of-Hearing community worldwide.
+                    Envisioned and built with ❤️ by <strong>Pratyaksha</strong> to empower the Deaf &amp;
+                    Hard-of-Hearing community worldwide.
                 </p>
                 <button class="footer-ashi-btn" onclick="openAshi()">
                     <span class="pulse-dot"></span>
@@ -122,7 +125,7 @@
                 <a href="#top" class="back-to-top-btn">
                     <span>Back to top</span>
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                        <path d="M12 4l-8 8h5v8h6v-8h5z"/>
+                        <path d="M12 4l-8 8h5v8h6v-8h5z" />
                     </svg>
                 </a>
             </div>
@@ -711,10 +714,10 @@
                 setTimeout(() => {
                     const g = (detectedLang === 'hi') ? "नमस्ते! मैंने भाषा चुन ली है। 😊 आपका नाम क्या है?" :
                         (detectedLang === 'es') ? "¡Hola! He seleccionado Español. 😊 ¿Cómo te llamas?" :
-                        (detectedLang === 'fr') ? "Bonjour ! J'ai sélectionné le Français. 😊 Quel est votre prénom ?" :
-                        (detectedLang === 'de') ? "Hallo! Ich habe Deutsch gewählt. 😊 Wie heißen Sie?" :
-                        (detectedLang === 'it') ? "Ciao! Ho selezionato l'Italiano. 😊 Come ti chiami?" :
-                        "Hello! I've set your language to English! 😊 What is your real name?";
+                            (detectedLang === 'fr') ? "Bonjour ! J'ai sélectionné le Français. 😊 Quel est votre prénom ?" :
+                                (detectedLang === 'de') ? "Hallo! Ich habe Deutsch gewählt. 😊 Wie heißen Sie?" :
+                                    (detectedLang === 'it') ? "Ciao! Ho selezionato l'Italiano. 😊 Come ti chiami?" :
+                                        "Hello! I've set your language to English! 😊 What is your real name?";
                     addMsg('bot', md2(g));
                     inp.placeholder = 'Your real name...';
                     document.getElementById('ashi-msgs').scrollTop = 99999;
@@ -735,10 +738,10 @@
                 setTimeout(() => {
                     const q = (lang === 'hi') ? `अच्छा, **${cleanName}**! आपकी उम्र क्या है?` :
                         (lang === 'es') ? `Encantada, **${cleanName}**! ¿Cuántos años tienes?` :
-                        (lang === 'fr') ? `Ravi de vous rencontrer, **${cleanName}** ! Quel est votre âge ?` :
-                        (lang === 'de') ? `Schön, **${cleanName}**! Wie alt sind Sie?` :
-                        (lang === 'it') ? `Piacere, **${cleanName}**! Quanti anni hai?` :
-                        `Nice to meet you, **${cleanName}**! How old are you?`;
+                            (lang === 'fr') ? `Ravi de vous rencontrer, **${cleanName}** ! Quel est votre âge ?` :
+                                (lang === 'de') ? `Schön, **${cleanName}**! Wie alt sind Sie?` :
+                                    (lang === 'it') ? `Piacere, **${cleanName}**! Quanti anni hai?` :
+                                        `Nice to meet you, **${cleanName}**! How old are you?`;
                     addMsg('bot', md2(q));
                     inp.placeholder = 'Your age (e.g. 21)...';
                     document.getElementById('ashi-msgs').scrollTop = 99999;
@@ -931,7 +934,7 @@ How can I help you today? Here are some suggested questions:`;
 
             const badge = document.getElementById('quizSystemBadge');
             if (badge) {
-                badge.textContent = quizCurrentDataset === 'asl' ? '🤟 ASL Question' : '🇮🇳 ISL Question';
+                badge.textContent = quizCurrentDataset === 'asl' ? 'ASL Question' : 'ISL Question';
                 badge.style.background = quizCurrentDataset === 'asl' ? 'rgba(79, 195, 247, 0.15)' : 'rgba(255, 152, 0, 0.15)';
                 badge.style.color = quizCurrentDataset === 'asl' ? '#4fc3f7' : '#ffb74d';
                 badge.style.borderColor = quizCurrentDataset === 'asl' ? 'rgba(79, 195, 247, 0.4)' : 'rgba(255, 152, 0, 0.4)';
@@ -1088,7 +1091,9 @@ How can I help you today? Here are some suggested questions:`;
         <div class="quiz-modal-card">
             <div class="quiz-modal-header">
                 <div style="display:flex;align-items:center;gap:10px;">
-                    <span id="quizSystemBadge" style="background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);padding:4px 12px;border-radius:14px;font-size:12px;font-weight:700;color:#4fc3f7;">ASL Question</span>
+                    <span id="quizSystemBadge"
+                        style="background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.4);padding:4px 12px;border-radius:14px;font-size:12px;font-weight:700;color:#4fc3f7;">ASL
+                        Question</span>
                     <h3 style="margin:0;font-size:18px;color:#fff;">Sign Practice Quiz</h3>
                 </div>
                 <div class="quiz-score-board">
@@ -1104,7 +1109,9 @@ How can I help you today? Here are some suggested questions:`;
                 </div>
                 <p id="quizFeedback" class="quiz-feedback-text">Which letter (A-Z) is being signed above?</p>
                 <div id="quizOptionsRow" class="quiz-options-grid"></div>
-                <div id="quizTeachingCard" style="display:none;margin-top:14px;background:rgba(4,14,32,0.95);border:1px solid rgba(255,183,77,0.4);border-radius:14px;padding:14px;text-align:center;"></div>
+                <div id="quizTeachingCard"
+                    style="display:none;margin-top:14px;background:rgba(4,14,32,0.95);border:1px solid rgba(255,183,77,0.4);border-radius:14px;padding:14px;text-align:center;">
+                </div>
             </div>
         </div>
     </div>

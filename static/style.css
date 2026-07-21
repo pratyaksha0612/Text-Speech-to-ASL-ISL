@@ -20,19 +20,20 @@ html, body, main, div, section, iframe, #ashi-msgs {
 }
 
 body {
-
     margin: 0;
     font-family: 'Inter', 'Segoe UI', sans-serif;
     color: white;
-    background: black;
-
+    background: #040c1c;
     overflow-x: hidden;
     overflow-y: auto;
-
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-main{
-display:block !important;
+main {
+    flex: 1 0 auto;
+    width: 100%;
 }
 
 .about-page{
@@ -3032,4 +3033,193 @@ color:#cfe8ff;
     color: #040c1c;
     border-color: #4fc3f7;
     box-shadow: 0 0 12px rgba(79, 195, 247, 0.7);
+}
+
+/* ================= FOOTER & FOOTER BOTTOM STYLES ================= */
+.footer {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(4, 12, 28, 0.96) 0%, rgba(2, 6, 16, 0.99) 100%);
+    border-top: 1px solid rgba(79, 195, 247, 0.25);
+    box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 10;
+    margin-top: 60px;
+    padding-top: 40px;
+    box-sizing: border-box;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 36px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.2fr;
+    gap: 40px;
+}
+
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 580px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.footer-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.footer-logo-text {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+.footer-tagline {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.footer-badge {
+    background: rgba(79, 195, 247, 0.12);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    color: #4fc3f7;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.footer-col-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #4fc3f7;
+    margin: 0 0 16px;
+    letter-spacing: 0.5px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #4fc3f7;
+    transform: translateX(4px);
+}
+
+.footer-creator-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin: 0 0 16px;
+}
+
+.footer-ashi-btn {
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.2), rgba(79, 195, 247, 0.08));
+    border: 1px solid rgba(79, 195, 247, 0.4);
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.footer-ashi-btn:hover {
+    background: #4fc3f7;
+    color: #040c1c;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+}
+
+/* FOOTER BOTTOM BAR - FULL WIDTH ANCHORED FLUSH */
+.footer-bottom {
+    width: 100%;
+    background: rgba(2, 6, 14, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 18px 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.footer-bottom-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.footer-bottom-container p {
+    margin: 0;
+}
+
+.back-to-top-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.back-to-top-btn:hover {
+    background: rgba(79, 195, 247, 0.2);
+    border-color: #4fc3f7;
+    color: #4fc3f7;
+    transform: translateY(-2px);
 }
